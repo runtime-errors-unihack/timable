@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FC } from "react";
 import { Pie } from "@ant-design/plots";
 import ReactDOM from "react-dom";
+import "./index.styles.css";
 
 const DonutChart: FC = () => {
   const data = [
@@ -40,9 +41,12 @@ const DonutChart: FC = () => {
       return "#DB3F3F";
     },
   };
+
   return (
-    <div className="donutContainer">
-      <Pie {...config} className="donutChartComponent"/>
+    <div className="whiteBorder">
+      <div className="donutContainer">
+        <Pie {...config} className="donutChartComponent" />
+      </div>
     </div>
   );
 };
