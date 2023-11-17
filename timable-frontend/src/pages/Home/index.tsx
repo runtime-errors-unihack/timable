@@ -1,11 +1,11 @@
 import { FC } from "react";
 import "./index.styles.css";
-import Content from "../../components/Content";
+import CityMap from "../../components/CityMap";
 
 const Home: FC = () => {
   return (
     <>
-      <div>Home</div>
+      <CityMap />
     </>
   );
 };
