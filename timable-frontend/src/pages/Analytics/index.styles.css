@@ -1,4 +1,24 @@
 .chartContainers{
     display: flex;
     flex-direction: column;
+    margin-right: 20px;
+}
+
+.pdfButton{
+    background: #dd4949;
+    padding: 10px;
+    font-size: 27px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    width: 212px;
+    border-radius: 5px;
+
+}
+
+.buttonPdfContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
