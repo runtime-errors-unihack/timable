@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from loguru import logger
 from sqlalchemy.orm import Session
 
 from ..db.db_models import UserModelDB

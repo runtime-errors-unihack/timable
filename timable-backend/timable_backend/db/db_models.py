@@ -88,6 +88,10 @@ class PinModelDB(BaseModel):
         String,
         nullable=False
     )
+    type = Column(
+        String,
+        nullable=False
+    )
     # user_id = Column(
     #     Integer,
     #     ForeignKey("users.id")
@@ -129,7 +133,6 @@ class VoteModelDB(BaseModel):
     #     "UserModelDB",
     #     back_populates="votes"
     # )
-    #
     # pin = relationship(
     #     "PinModelDB",
     #     back_populates="votes"
@@ -153,7 +156,7 @@ class PinTypeModelDB(BaseModel):
         String,
         nullable=False
     )
-    # pins = relationship(
+    # pin = relationship(
     #     "PinModelDB",
     #     back_populates="type"
     # )
