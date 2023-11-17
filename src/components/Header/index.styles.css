@@ -1,0 +1,46 @@
+.headerContainer{
+    height: 80px;
+    background-color: #2D74AD;
+    font-family: 'Roboto';
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 50px;
+
+}
+
+.headerTitle{
+    font-size: 40px;
+    padding: 0px 20px;
+    font-weight: 500;
+}
+
+
+.whiteLetter{
+    font-weight: 700;
+    color: white;
+    font-family: 'Roboto';
+}
+
+.logooutContianer{
+    display: flex;
+    width: 120px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.logoutText{
+    font-size: 25px;
+    color: white;
+}
+
+.headerLogoContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerLogo{
+    font-size: 25px;
+    color: white;
+}
