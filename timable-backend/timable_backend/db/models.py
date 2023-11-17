@@ -46,14 +46,14 @@ class UserModelDB(BaseModel):
         nullable=True
     )
 
-    pins = relationship(
-        "PinModelDB",
-        back_populates="user"
-    )
-    votes = relationship(
-        "VoteModelDB",
-        back_populates="user"
-    )
+    # pins = relationship(
+    #     "PinModelDB",
+    #     back_populates="user"
+    # )
+    # votes = relationship(
+    #     "VoteModelDB",
+    #     back_populates="user"
+    # )
 
 
 class PinModelDB(BaseModel):
@@ -83,14 +83,18 @@ class PinModelDB(BaseModel):
         String,
         nullable=False
     )
-    type = relationship(
-        "PinTypeModelDB",
-        back_populates="category"
+    type = Column(
+        String,
+        nullable=False
     )
-    user = relationship(
-        "UserModelDB",
-        back_populates="user"
-    )
+    # type = relationship(
+    #     "PinTypeModelDB",
+    #     back_populates="category"
+    # )
+    # user = relationship(
+    #     "UserModelDB",
+    #     back_populates="user"
+    # )
 
 
 class VoteModelDB(BaseModel):
@@ -107,20 +111,20 @@ class VoteModelDB(BaseModel):
         ForeignKey("users.id")
     )
 
-    user = relationship(
-        "UserModelDB",
-        back_populates="votes"
-    )
+
 
     pin_id = Column(
         Integer,
         ForeignKey("pins.id")
     )
-
-    pin = relationship(
-        "PinModelDB",
-        back_populates="votes"
-    )
+    # user = relationship(
+    #     "UserModelDB",
+    #     back_populates="votes"
+    # )
+    # pin = relationship(
+    #     "PinModelDB",
+    #     back_populates="votes"
+    # )
 
     positive = Column(
         Boolean,
@@ -140,7 +144,7 @@ class PinTypeModelDB(BaseModel):
         String,
         nullable=False
     )
-    pin = relationship(
-        "PinModelDB",
-        back_populates="type"
-    )
+    # pin = relationship(
+    #     "PinModelDB",
+    #     back_populates="type"
+    # )
