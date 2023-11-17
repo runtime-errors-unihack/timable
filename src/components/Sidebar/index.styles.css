@@ -1,0 +1,16 @@
+.sidebarContainer {
+  height: 100%;
+  width: 20%;
+  background-color: yellow;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.siderBackground {
+  background-color: #2d74ad;
+  border-radius: 9px;
+  margin: 20px;
+  height: 90%;
+  width: 90%;
+}
