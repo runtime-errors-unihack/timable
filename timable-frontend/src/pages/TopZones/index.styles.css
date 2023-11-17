@@ -1,0 +1,12 @@
+
+
+.zoneMapsBigContainer{
+height: 600px;
+width: 900px;
+background-color: white;
+}
+
+.topZonesPageContainer{
+    display: flex;
+    flex-direction: row;
+}

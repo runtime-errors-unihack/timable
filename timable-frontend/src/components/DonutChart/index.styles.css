@@ -1,12 +1,13 @@
 .donutContainer{
-    height: 35%;
-    max-width: 500px;
-    min-width: 500px;
+    height: 200px;
+    max-width: 580px;
+    min-width: 580px;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
+    margin-bottom: 20px;
 }
 
 
@@ -14,8 +15,10 @@
     height: 200px !important;
 }
 
-.whiteBorder{
+.whiteBorderDonut{
     background-color: rgba(255, 255, 255, 0.453);
     padding: 10px;
+    height: 220px;
     width: 600px;
+    margin-top: 10px;
 }
