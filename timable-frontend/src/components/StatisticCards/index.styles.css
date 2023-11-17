@@ -1,0 +1,57 @@
+.staticCardsContainer {
+  background: white;
+  height: 110px;
+  width: 250px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin: 20px 0px;
+}
+
+.staticCardsTile {
+  font-size: 25px;
+}
+
+.staticCardsNumberAverage {
+  font-size: 60px;
+  color: #db3f3f;
+}
+
+.staticCardsNumberTotal {
+  font-size: 60px;
+  color: #2d74ad;
+}
+
+.staticCardsNumberClosed {
+  font-size: 60px;
+  color: #006767;
+}
+
+.staticCardsBigContainer {
+}
+
+.topList {
+}
+
+.zone {
+    font-size: 25px;
+    margin-bottom: 5px;
+    color: #006767;
+}
+
+.staticCardZone {
+  background: white;
+  height: 130px;
+  width: 250px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 600;
+  margin: 20px 0px;
+  padding-top: 10px;
+}
+
