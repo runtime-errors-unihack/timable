@@ -1,13 +1,18 @@
-import React from "react";
+import { FC } from "react";
 import "./index.styles.css";
 import { LogoutOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header: FC = () => {
+  const navigate = useNavigate();
+  
   const handleLogIn = () => {};
 
   const handleRegistration = () => {};
 
-  const handleGoHome = () => {};
+  const handleGoHome = () => {
+    navigate('/');
+  };
 
   return (
     <div className="headerContainer">
@@ -17,7 +22,7 @@ const Header = () => {
         <span className="normalLetter">mAble</span>
       </div>
       {/* Render this when user is logged in */}
-      <div className="logooutContianerLogOut">
+      <div className="logoutContainer">
         <div className="headerLogoContainer">
           {" "}
           <LogoutOutlined className="headerLogo" />

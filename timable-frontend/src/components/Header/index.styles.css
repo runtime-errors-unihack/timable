@@ -23,14 +23,7 @@
   font-family: "Roboto";
 }
 
-.logooutContianer {
-  display: flex;
-  min-width: 120px;
-  cursor: pointer;
-  justify-content: space-between;
-}
-
-.logooutContianerLogOut {
+.logoutContainer {
   display: flex;
   width: 120px;
   cursor: pointer;

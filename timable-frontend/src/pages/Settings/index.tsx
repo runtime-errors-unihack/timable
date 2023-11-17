@@ -1,12 +1,12 @@
 import { FC } from "react";
 import "./index.styles.css";
 
-const AboutUs: FC = () => {
+const Settings: FC = () => {
   return (
     <>
-      <div>About Us</div>
+      <div>Settings</div>
     </>
   );
 };
 
-export default AboutUs;
+export default Settings;

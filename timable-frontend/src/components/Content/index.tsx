@@ -1,12 +1,15 @@
-import React, { FC } from "react";
+import { FC, ReactNode } from "react";
 import "./index.styles.css";
-import DonutChart from "../DonutChart";
 import ColumChart from "../ColumnChart";
 
-const Content: FC = () => {
+interface ContentProps {
+  children: ReactNode;
+}
+
+const Content: FC<ContentProps> = ({children}) => {
   return (
     <div className="contentContainer">
-      <ColumChart />
+      {children}
     </div>
   );
 };

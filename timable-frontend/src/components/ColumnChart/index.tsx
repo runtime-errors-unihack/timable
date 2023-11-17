@@ -1,6 +1,5 @@
-import { Datum } from "@ant-design/charts";
 import { Column } from "@ant-design/plots";
-import React, { useState, useEffect, FC } from "react";
+import { FC } from "react";
 import './index.styles.css'
 
 const ColumChart: FC = () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import "./index.styles.css";
 import {
   AreaChartOutlined,
@@ -7,15 +7,35 @@ import {
   SettingOutlined,
   SketchOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
-const handleGoAboutUs = () => {};
-const handleGoAnalytics = () => {};
-const handleGoHome = () => {};
-const handleGoTopUsers = () => {};
-const handleGoTopZones = () => {};
-const handleGoSettings = () => {};
+const SideBarButtons: FC = () => {
+  const navigate = useNavigate();
 
-const SideBarButtons = () => {
+  const handleGoAboutUs = () => {
+    navigate("/about-us");
+  };
+
+  const handleGoAnalytics = () => {
+    navigate("/analytics");
+  };
+
+  const handleGoHome = () => {
+    navigate("/");
+  };
+
+  const handleGoTopUsers = () => {
+    navigate("/top-users");
+  };
+
+  const handleGoTopZones = () => {
+    navigate("/top-zones");
+  };
+
+  const handleGoSettings = () => {
+    navigate("/settings");
+  };
+
   return (
     <>
       <div className="siderButtonContainer">
@@ -26,6 +46,7 @@ const SideBarButtons = () => {
           <div> Home</div>
         </div>
       </div>
+
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoTopUsers()}>
           <div>
@@ -34,14 +55,16 @@ const SideBarButtons = () => {
           <div> Top Users</div>
         </div>
       </div>
+
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoTopZones()}>
           <div>
             <SketchOutlined className="sidebarIcon" />
           </div>
-          <div> Top Neighborhoods</div>
+          <div> Top Zones</div>
         </div>
       </div>
+      
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoAnalytics()}>
           <div>
@@ -50,6 +73,7 @@ const SideBarButtons = () => {
           <div> Analytics</div>
         </div>
       </div>
+
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoSettings()}>
           <div>
@@ -58,6 +82,7 @@ const SideBarButtons = () => {
           <div> Settings</div>
         </div>
       </div>
+
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoAboutUs()}>
           <div>

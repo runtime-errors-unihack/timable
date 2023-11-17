@@ -1,12 +1,12 @@
 import { FC } from "react";
 import "./index.styles.css";
 
-const AboutUs: FC = () => {
+const TopZones: FC = () => {
   return (
     <>
-      <div>About Us</div>
+      <div>Top Zones</div>
     </>
   );
 };
 
-export default AboutUs;
+export default TopZones;
