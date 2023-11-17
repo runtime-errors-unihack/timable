@@ -1,0 +1,4 @@
+.chartContainers{
+    display: flex;
+    flex-direction: column;
+}

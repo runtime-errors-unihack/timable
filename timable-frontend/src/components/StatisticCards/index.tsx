@@ -5,7 +5,7 @@ import SideBarButtons from "../SideBarButton";
 const StaticCards = () => {
   return (
     <div className="staticCardsBigContainer">
-      <div className="staticCardsContainer">
+      <div className="staticCardsContainerFirst">
         <div className="staticCardsTile">City Average</div>
         <div className="staticCardsNumberAverage">3.2</div>
       </div>

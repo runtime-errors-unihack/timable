@@ -11,6 +11,19 @@
   margin: 20px 0px;
 }
 
+.staticCardsContainerFirst{
+  background: white;
+  height: 110px;
+  width: 250px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
 .staticCardsTile {
   font-size: 25px;
 }
@@ -31,15 +44,17 @@
 }
 
 .staticCardsBigContainer {
+  margin-left: 20px;
+  min-width: 255px;
 }
 
 .topList {
 }
 
 .zone {
-    font-size: 25px;
-    margin-bottom: 5px;
-    color: #006767;
+  font-size: 25px;
+  margin-bottom: 5px;
+  color: #006767;
 }
 
 .staticCardZone {
@@ -54,4 +69,3 @@
   margin: 20px 0px;
   padding-top: 10px;
 }
-

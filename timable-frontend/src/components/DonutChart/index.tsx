@@ -43,7 +43,7 @@ const DonutChart: FC = () => {
   };
 
   return (
-    <div className="whiteBorder">
+    <div className="whiteBorderDonut">
       <div className="donutContainer">
         <Pie {...config} className="donutChartComponent" />
       </div>
