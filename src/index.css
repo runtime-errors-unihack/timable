@@ -23,4 +23,6 @@ body {
   display: flex;
   height: 85%;
   width: 100%;
+  min-width: 620px;
+  min-height: 550px;
 }

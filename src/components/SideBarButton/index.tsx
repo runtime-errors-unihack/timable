@@ -19,7 +19,7 @@ const SideBarButtons = () => {
   return (
     <>
       <div className="siderButtonContainer">
-        <div className="siderBarLink" onClick={() => handleGoHome()}>
+        <div className="firstSiderBarLink" onClick={() => handleGoHome()}>
           <div>
             <HomeOutlined className="sidebarIcon" />
           </div>
