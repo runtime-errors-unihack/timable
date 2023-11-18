@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from loguru import logger
+from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
 from timable_backend.api import users, session, pin
@@ -15,6 +16,16 @@ app.include_router(users.router)
 app.include_router(session.router)
 app.include_router(pin.router)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "https://localhost:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def initialize_database():
