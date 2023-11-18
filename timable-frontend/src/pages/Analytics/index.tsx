@@ -9,7 +9,6 @@ import {
   Document,
   Text,
   Page,
-  PDFViewer,
   View,
   PDFDownloadLink,
   StyleSheet,
@@ -19,26 +18,12 @@ import {
 const Analytics: FC = () => {
   const today = new Date();
 
-  // Get day, month, and year
-  const day = today.getDate().toString().padStart(2, "0");
-  const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
-  const year = today.getFullYear();
-
   const formattedDate = today.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 
-  const openPdfInNewWindow = () => {
-    fetch("/path-to-pdf") // Replace '/path-to-pdf' with the actual path or URL of your PDF
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        window.open(url, "_blank");
-      })
-      .catch((error) => console.error("Error fetching PDF:", error));
-  };
 
   Font.register({
     family: "Roboto",
@@ -68,16 +53,16 @@ const Analytics: FC = () => {
       marginTop: 10,
       border: "1px solid black",
     },
-    row: { flexDirection: "row", width: '600px', borderRight: '1px solid red' },
+    row: { flexDirection: "row", width: "600px", borderRight: "1px solid red" },
     cell: {
       padding: 5,
       borderColor: "#000",
       borderRight: "1px solid black",
       borderLeft: "1px solid black",
-      fontSize: '12px',
+      fontSize: "12px",
       fontWeight: 600,
       width: 200,
-      textAlign: 'center'
+      textAlign: "center",
     },
     headerCell: {
       padding: 5,
@@ -85,8 +70,8 @@ const Analytics: FC = () => {
       backgroundColor: "#eee",
       borderColor: "#000",
       fontSize: "14px",
-      borderRight: '1px solid black',
-      width: 400
+      borderRight: "1px solid black",
+      width: 400,
     },
   });
 
@@ -128,6 +113,126 @@ const Analytics: FC = () => {
             </View>
             <View style={styles.cell}>
               <Text>23</Text>
+            </View>
+          </View>
+        </View>
+        
+        <Text style={styles.subtitle}>"Monthly Issues Overview"</Text>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <View style={styles.headerCell}>
+              <Text>January</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>February</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>March</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>April</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>May</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>June</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>July</Text>
+            </View>
+            <View style={styles.headerCell}>
+              <Text>August</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.cell}>
+              <Text>Total Issues</Text>
+            </View>
+            {/* Populate the cells with numbers (replace these with your actual data) */}
+            <View style={styles.cell}>
+              <Text>100</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>150</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>200</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>120</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>90</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>180</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>250</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>300</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.cell}>
+              <Text>Active Issues</Text>
+            </View>
+            {/* Populate the cells with numbers (replace these with your actual data) */}
+            <View style={styles.cell}>
+              <Text>50</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>70</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>80</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>60</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>40</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>100</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>120</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>150</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.cell}>
+              <Text>Closed Issues</Text>
+            </View>
+            {/* Populate the cells with numbers (replace these with your actual data) */}
+            <View style={styles.cell}>
+              <Text>50</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>80</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>120</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>60</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>100</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>30</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>80</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text>90</Text>
             </View>
           </View>
         </View>
