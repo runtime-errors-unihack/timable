@@ -48,6 +48,7 @@ class PinModelDB(BaseModel):
         secondary=pin_disability_association,
         back_populates="pins",
     )
+    is_anonymous = Column(Boolean, default=False, nullable=True)
 
     votes = relationship("VoteModelDB", back_populates="pin")
 
@@ -62,8 +63,6 @@ class VoteModelDB(BaseModel):
     user = relationship("UserModelDB", back_populates="votes")
 
     pin = relationship("PinModelDB", back_populates="votes")
-
-    is_anonymous = Column(Boolean, default=False, nullable=True)
 
     state = Column(
         Enum(

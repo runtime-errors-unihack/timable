@@ -24,6 +24,7 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
         user_id=pin.user_id,
         description=pin.description,
+        is_anonymous=pin.is_anonymous,
     )
 
     try:

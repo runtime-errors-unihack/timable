@@ -33,7 +33,7 @@ async def create_vote(vote: VoteModel, db=Depends(get_db)):
     if vote_exists:
         raise HTTPException(status_code=403, detail=f"A vote for this pin already exists for this user.")
     new_vote = VoteModelDB(
-        user_id=vote.user_id, pin_id=vote.pin_id, state=vote.state.value, is_anonymous=vote.is_anonymous
+        user_id=vote.user_id, pin_id=vote.pin_id, state=vote.state.value
     )
     try:
         db.add(new_vote)
@@ -48,7 +48,7 @@ async def create_vote(vote: VoteModel, db=Depends(get_db)):
 @router.patch("/vote/{id}", description="Update a vote by ID", response_model=VoteExtended)
 async def update_vote(id: int, vote: VoteModel, db=Depends(get_db)):
     db_vote = get_vote_by_id(id, db)
-    if db.vote.state.value == vote.state.value:
+    if db_vote.state == vote.state.value:
         return db_vote
     db_vote.state = vote.state.value
     db.commit()

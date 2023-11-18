@@ -27,4 +27,5 @@ async def get_session(session: str):
     """
     This will receive a JWT token and return the user's id, username, and is_admin flag.
     """
+    #TODO: return fresh info about the user
     return get_jwt_session(session)

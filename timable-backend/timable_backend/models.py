@@ -7,9 +7,23 @@ class UserBase(BaseModel):
     email: str = Field(description="The user's email")
     password: str = Field(description="The user's password")
     is_admin: bool = Field(description="Whether the user is an admin", default=False)
-    name: str = Field(description="The user's name")
-    surname: str = Field(description="The user's surname")
+    name: str | None = Field(description="The user's name", default=None)
+    surname: str | None = Field(description="The user's surname", default=None)
     phone: str = Field(description="The user's phone number")
+
+
+class UserEdit(BaseModel):
+    """
+    UserBase with optional fields
+    """
+    username: str | None = Field(description="The user's username", default=None)
+    email: str | None = Field(description="The user's email", default=None)
+    password: str | None = Field(description="The user's password", default=None)
+    is_admin: bool | None = Field(description="Whether the user is an admin", default=None)
+    name: str | None = Field(description="The user's name", default=None)
+    surname: str | None = Field(description="The user's surname", default=None)
+    phone: str | None = Field(description="The user's phone number", default=None)
+    profile_pic_url: str | None = Field(description="The URL of the user's profile picture", default=None)
 
 
 class UserExtended(UserBase):
@@ -42,6 +56,7 @@ class PinModel(BaseModel):
     description: str | None = Field(
         description="A description of the pin", default=None
     )
+    is_anonymous: bool | None = Field(description="Whether the vote is anonymous", default=False)
 
 
 class PinExtended(PinModel):
@@ -64,7 +79,6 @@ class VoteModel(BaseModel):
     user_id: int = Field(description="The ID of the user that votes the pin")
     pin_id: int = Field(description="The ID of the pin")
     state: VoteStateEnum = Field(description="The type of the vote")
-    is_anonymous: bool = Field(description="Whether the vote is anonymous", default=False)
 
 
 class VoteExtended(VoteModel):
