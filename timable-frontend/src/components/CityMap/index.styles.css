@@ -1,0 +1,111 @@
+.mapContainer {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status {
+  border: 1px solid black;
+}
+
+.card {
+  width: 250px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+form {
+  width: 350px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: rgb(88, 87, 87);
+}
+
+label {
+  width: max-content;
+  font-size: 16px;
+  margin: 3px 0;
+  font-weight: bold;
+}
+
+.desc {
+  font-size: 14px;
+}
+
+.username {
+  font-size: 14px;
+}
+
+.date {
+  font-size: 12px;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-size: 12px;
+  color: rgb(185, 184, 184);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+textarea {
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.submitButton {
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  background-color: black;
+  cursor: pointer;
+}
+
+.buttons,
+.logout {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.button {
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.logout {
+  background-color: tomato;
+}
+
+.login {
+  background-color: teal;
+  margin-right: 10px;
+}
+
+.register {
+  background-color: slateblue;
+}
