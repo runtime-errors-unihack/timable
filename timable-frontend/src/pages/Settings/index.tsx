@@ -1,9 +1,12 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button, Input } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import "./index.styles.css";
 
 const Settings: FC = () => {
+  const [disabledUsername, setDisabledUsername] = useState(true);
+  const [disabledPhoneNumber, setDisabledPhoneNumber] = useState(true);
+  const [disabledPassword, setDisabledPassword] = useState(true)
   return (
     <>
       <div className="settingsBigContainer">
@@ -17,15 +20,49 @@ const Settings: FC = () => {
 
             <div className="settingsFieldsContainer">
               <div className="inputFieldSettings">
-                <Input className="inputSettingsBox" placeholder="Username" />{" "}
-                <EditOutlined className="iconSettings" />
+                <Input
+                  className="inputSettingsBox"
+                  disabled={disabledUsername}
+                  placeholder="Username"
+                />{" "}
+                <EditOutlined
+                  className="iconSettings"
+                  onClick={() => {
+                    setDisabledPhoneNumber(true);
+                    setDisabledUsername(false);
+                    setDisabledPassword(true);
+                  }}
+                />
               </div>
               <div className="inputFieldSettings">
                 <Input
                   className="inputSettingsBox"
                   placeholder="Phone number"
+                  disabled={disabledPhoneNumber}
                 />
-                <EditOutlined className="iconSettings" />
+                <EditOutlined
+                  className="iconSettings"
+                  onClick={() => {
+                    setDisabledPhoneNumber(false);
+                    setDisabledUsername(true);
+                    setDisabledPassword(true);
+                  }}
+                />
+              </div>
+              <div className="inputFieldSettings">
+                <Input.Password
+                  className="inputSettingsBox"
+                  placeholder="Password"
+                  disabled={disabledPassword}
+                />
+                <EditOutlined
+                  className="iconSettings"
+                  onClick={() => {
+                    setDisabledPassword(false);
+                    setDisabledUsername(true);
+                    setDisabledPhoneNumber(true);
+                  }}
+                />
               </div>
               <div className="inputFieldSettings">
                 <Input
@@ -34,9 +71,13 @@ const Settings: FC = () => {
                   placeholder="biancadenisa93@yahoo.com"
                 />
               </div>
-              <Button className="changePasswordSettings" type="primary">
-                Change Password
-              </Button>
+              
+              <div className="buttonsSettingsContainer">
+                
+                <Button className="changePasswordSettings" type="primary">
+                  Save Changes
+                </Button>
+              </div>
             </div>
           </div>
 

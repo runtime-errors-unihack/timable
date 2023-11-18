@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import "./index.styles.css";
 import DonutChart from "../../components/DonutChart";
 import ColumChart from "../../components/ColumnChart";
@@ -12,10 +12,55 @@ import {
   View,
   PDFDownloadLink,
   StyleSheet,
+  Image,
   Font,
 } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
 
 const Analytics: FC = () => {
+  const [screenshotTypeChart, setScreenshotTypeChart] = useState<null | string>(
+    null
+  );
+  const [screenshotDonutChart, setScreenshotDonutChart] = useState<
+    null | string
+  >(null);
+  const [screenshotColumnChart, setScreenshotColumnChart] = useState<
+    null | string
+  >(null);
+
+  const captureScreenshot = async (containerId?: any) => {
+    const container = document.getElementById(containerId);
+
+    if (container) {
+      try {
+        const canvas = await html2canvas(container);
+        return canvas.toDataURL("image/png");
+      } catch (error) {
+        console.error("Error capturing screenshot:", error);
+        return null;
+      }
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const captureAndSetScreenshots = async () => {
+      // Wait for 3 seconds before capturing the screenshots
+      setTimeout(async () => {
+        const screenshotTypeChart = await captureScreenshot("type-chart");
+        const screenshotDonutChart = await captureScreenshot("donut-chart");
+        const screenshotColumnChart = await captureScreenshot("column-chart");
+
+        setScreenshotTypeChart(screenshotTypeChart);
+        setScreenshotDonutChart(screenshotDonutChart);
+        setScreenshotColumnChart(screenshotColumnChart);
+      }, 3000); // 3000 milliseconds = 3 seconds
+    };
+
+    captureAndSetScreenshots();
+  }, []);
+
   const today = new Date();
 
   const formattedDate = today.toLocaleDateString("en-GB", {
@@ -24,266 +69,282 @@ const Analytics: FC = () => {
     year: "numeric",
   });
 
-
-  Font.register({
-    family: "Roboto",
-    fonts: [
-      {
-        src: "https://cdnjs.cloudflare.com/ajax/libs/roboto/2.0.1/Roboto-Bold.ttf",
-      },
-      {
-        src: "https://cdnjs.cloudflare.com/ajax/libs/roboto/2.0.1/Roboto-Regular.ttf",
-      },
-    ],
-  });
-
-  // Create styles for the document
   const styles = StyleSheet.create({
-    page: { paddingTop: 30, paddingBottom: 30, paddingHorizontal: 30 },
-    title: {
-      fontSize: 20,
-      marginBottom: 10,
-      fontFamily: "Roboto-Bold",
+    reportTitle: {
+      fontSize: 18,
       textAlign: "center",
-    }, // Apply the font family
-    subtitle: { fontSize: 14, marginBottom: 10, fontFamily: "Roboto-Regular" }, // Apply the font family
-    table: {
-      display: undefined,
-      width: "auto",
-      marginTop: 10,
-      border: "1px solid black",
-    },
-    row: { flexDirection: "row", width: "600px", borderRight: "1px solid red" },
-    cell: {
-      padding: 5,
-      borderColor: "#000",
-      borderRight: "1px solid black",
-      borderLeft: "1px solid black",
-      fontSize: "12px",
+      marginTop: 20,
       fontWeight: 600,
-      width: 200,
+      marginBottom: 30
+    },
+
+    subTitle: {
+      fontSize: 14,
+      textAlign: "left",
+      // marginTop: 30,
+      paddingTop: 40,
+      fontWeight: 600,
+    },
+    category: {
+      fontWeight: 600,
+      border: "1px solid black",
+      fontSize: 12,
+      width: 120,
       textAlign: "center",
     },
-    headerCell: {
-      padding: 5,
-      borderBottom: 1,
-      backgroundColor: "#eee",
-      borderColor: "#000",
-      fontSize: "14px",
-      borderRight: "1px solid black",
-      width: 400,
+    tableContainer: {
+      // border: "1px solid black",
+      marginTop: 20,
+      width: 560,
+    },
+    tableColumn: {
+      display: "flex",
+      width: 600,
+      justifyContent: "space-evenly",
+      flexDirection: "row",
+    },
+
+    firstChartContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
+    legend: {
+      fontSize: 12,
+      width: 500,
+      margin: "5px 5px 25px 5px",
+    },
+    legendContainer: {
+      paddingTop: 60,
+      paddingLeft: 50,
+    },
+    normalText: { paddingTop: 50, fontSize: 12 },
+    colm1: { backgroundColor: "#f5d55a", padding: 5, fontSize: 12 },
+    colm2: { backgroundColor: "#25a377", fontSize: 12 },
+    colm3: { backgroundColor: "#d14647", fontSize: 12 },
+    colm4: { backgroundColor: "#3572a8", fontSize: 12 },
+
+    reportContainer: {
+      padding: 10,
+    },
+
+    containerFirstChart: {
+      display: "flex",
+      flexDirection: "row",
+    },
+
+    subTitle1: {
+      fontSize: 14,
+      fontWeight: 600,
+      textAlign: "left",
+      paddingTop: 20,
+    },
+
+    monthTitle: {
+      border: "1px solid black",
+      fontSize: 12,
+      width: 60,
+    },
+    monthContainer: {
+      display: "flex",
+      flexDirection: "row",
+      textAlign: "center",
+      paddingLeft: "60px",
+      paddingTop: "20px",
+    },
+    rowContainer: {
+      width: 660,
+      display: "flex",
+      flexDirection: "row",
+    },
+    rowLastChartCell: {
+      border: "1px solid black",
+      textAlign: "center",
+      fontSize: "12px",
+      width: "60px",
+    },
+    normalTextTable: {
+      width: "60px",
+      fontSize: "10px",
+      border: "1px solid black",
     },
   });
 
   const MyDoc = () => (
     <Document>
       <Page size="A4">
-        <View>
-          <Text>TimAble Report - {formattedDate}</Text>
-        </View>
-        {/* Table */}
-        <Text>
-          "Disability-Related Issues: Column Chart Showing the Breakdown by
-          Category"
-        </Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.headerCell}>
-              <Text>Visual Impairment</Text>
+        <View style={styles.reportContainer}>
+          <Text style={styles.reportTitle}>
+            TimAble Report - {formattedDate}
+          </Text>
+          <Text style={styles.subTitle1}>
+            Disability-Related Issues: Breakdown by Category
+          </Text>
+          <View style={styles.tableContainer}>
+            <View style={styles.tableColumn}>
+              <Text style={styles.category}>Visual Impairment</Text>
+              <Text style={styles.category}>Physical Impairment</Text>
+              <Text style={styles.category}>Auditory Disabilities</Text>
+              <Text style={styles.category}>Speech Disabilities</Text>
             </View>
-            <View style={styles.headerCell}>
-              <Text>Physical Impairment</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>Auditory Disabilities</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>Speech Disabilities</Text>
+            <View style={styles.tableColumn}>
+              <Text style={styles.category}>323</Text>
+              <Text style={styles.category}>33</Text>
+              <Text style={styles.category}>23</Text>
+              <Text style={styles.category}>434</Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text>233</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>33</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>54</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>23</Text>
-            </View>
-          </View>
-        </View>
-        
-        <Text style={styles.subtitle}>"Monthly Issues Overview"</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.headerCell}>
-              <Text>January</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>February</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>March</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>April</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>May</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>June</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>July</Text>
-            </View>
-            <View style={styles.headerCell}>
-              <Text>August</Text>
+
+          <View style={styles.containerFirstChart}>
+            {screenshotTypeChart && (
+              <Image
+                style={{ marginTop: 20, width: 280, height: 300 }}
+                src={screenshotTypeChart}
+              />
+            )}
+            <View style={styles.legendContainer}>
+              <Text style={styles.legend}>
+                Visual Impairment <Text style={styles.colm1}>First column</Text>
+              </Text>
+              <Text style={styles.legend}>
+                Physical Impairment{" "}
+                <Text style={styles.colm2}>Second Column</Text>
+              </Text>
+              <Text style={styles.legend}>
+                Speech Disabilities{" "}
+                <Text style={styles.colm3}>Third Column</Text>
+              </Text>
+              <Text style={styles.legend}>
+                Auditory Disabilities{" "}
+                <Text style={styles.colm4}>Fourth Column</Text>
+              </Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text>Total Issues</Text>
+          <Text style={styles.subTitle}>Accessible - Non Accessible Ratio</Text>
+          <View style={styles.tableContainer}>
+            <View style={styles.tableColumn}>
+              <Text style={styles.category}>Accessible</Text>
+              <Text style={styles.category}>Non-Accessible</Text>
             </View>
-            {/* Populate the cells with numbers (replace these with your actual data) */}
-            <View style={styles.cell}>
-              <Text>100</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>150</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>200</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>120</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>90</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>180</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>250</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>300</Text>
+            <View style={styles.tableColumn}>
+              <Text style={styles.category}>67%</Text>
+              <Text style={styles.category}>33%</Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text>Active Issues</Text>
-            </View>
-            {/* Populate the cells with numbers (replace these with your actual data) */}
-            <View style={styles.cell}>
-              <Text>50</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>70</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>80</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>60</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>40</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>100</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>120</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>150</Text>
-            </View>
+          {screenshotDonutChart && (
+            <Image
+              style={{ marginTop: 10, width: 500, height: 230, paddingBottom: 20}}
+              src={screenshotDonutChart}
+            />
+          )}
+
+          <Text style={styles.subTitle}>Progress over the last 8 months</Text>
+          <Text style={styles.normalText}>
+            Total pins added in the month - Remaining active issues - Closed
+            issues
+          </Text>
+          <View style={styles.monthContainer}>
+            <Text style={styles.monthTitle}>November</Text>
+            <Text style={styles.monthTitle}>October</Text>
+            <Text style={styles.monthTitle}>September</Text>
+            <Text style={styles.monthTitle}>August</Text>
+            <Text style={styles.monthTitle}>July</Text>
+            <Text style={styles.monthTitle}>June</Text>
+            <Text style={styles.monthTitle}>May</Text>
+            <Text style={styles.monthTitle}>April</Text>
           </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text>Closed Issues</Text>
-            </View>
-            {/* Populate the cells with numbers (replace these with your actual data) */}
-            <View style={styles.cell}>
-              <Text>50</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>80</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>120</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>60</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>100</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>30</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>80</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text>90</Text>
-            </View>
+          <View style={styles.rowContainer}>
+            <Text style={styles.normalTextTable}>Total issues added</Text>
+            <Text style={styles.rowLastChartCell}>123</Text>
+            <Text style={styles.rowLastChartCell}>343</Text>
+            <Text style={styles.rowLastChartCell}>45</Text>
+            <Text style={styles.rowLastChartCell}>33</Text>
+            <Text style={styles.rowLastChartCell}>434</Text>
+            <Text style={styles.rowLastChartCell}>54</Text>
+            <Text style={styles.rowLastChartCell}>55</Text>
+            <Text style={styles.rowLastChartCell}>23</Text>
           </View>
+          <View style={styles.rowContainer}>
+            <Text style={styles.normalTextTable}>Issues Closed</Text>
+            <Text style={styles.rowLastChartCell}>13</Text>
+            <Text style={styles.rowLastChartCell}>33</Text>
+            <Text style={styles.rowLastChartCell}>5</Text>
+            <Text style={styles.rowLastChartCell}>33</Text>
+            <Text style={styles.rowLastChartCell}>44</Text>
+            <Text style={styles.rowLastChartCell}>5</Text>
+            <Text style={styles.rowLastChartCell}>51</Text>
+            <Text style={styles.rowLastChartCell}>20</Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <Text style={styles.normalTextTable}>Remaining Issues</Text>
+            <Text style={styles.rowLastChartCell}>11</Text>
+            <Text style={styles.rowLastChartCell}>2</Text>
+            <Text style={styles.rowLastChartCell}>33</Text>
+            <Text style={styles.rowLastChartCell}>11</Text>
+            <Text style={styles.rowLastChartCell}>32</Text>
+            <Text style={styles.rowLastChartCell}>12</Text>
+            <Text style={styles.rowLastChartCell}>3</Text>
+            <Text style={styles.rowLastChartCell}>3</Text>
+          </View>
+          {screenshotColumnChart && (
+            <Image
+              style={{ marginTop: 20, width: 390, height: 290 }}
+              src={screenshotColumnChart}
+            />
+          )}
         </View>
       </Page>
     </Document>
   );
 
   const handleOpenAndDownload = ({ blob, url, loading, error }: any) => {
-    if (!loading) {
-      // Open PDF in a new window
+    if (url) {
       window.open(url, "_blank");
-
-      // Download PDF
       const anchor = document.createElement("a");
       anchor.href = url as any;
       anchor.download = "somename.pdf";
       anchor.click();
+      return;
+    } else {
+      // If loading is true, wait for 3 seconds and then try again
+      setTimeout(() => {
+        handleOpenAndDownload({ blob, url, loading, error });
+      }, 4000); // 3000 milliseconds = 3 seconds
     }
   };
 
   return (
     <>
       <div className="chartContainers">
-        <DonutChart />
-        <ColumChart />
+        <div id="donut-chart">
+          <DonutChart />
+        </div>
+        <div id="column-chart">
+          {" "}
+          <ColumChart />
+        </div>
       </div>
 
-      <TypeChart />
+      <div id="type-chart">
+        <TypeChart />
+      </div>
       <div className="buttonPdfContainer">
         <StaticCards />
-
-        <Button type="primary" className="pdfButton">
-          <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
-            {({ blob, url, loading, error }) => (
-              <div>
-                {loading ? (
-                  "Loading document..."
-                ) : (
-                  <button
-                    onClick={() =>
-                      handleOpenAndDownload({ blob, url, loading, error })
-                    }
-                  >
-                    Open PDF in new window and Download PDF
-                  </button>
-                )}
-              </div>
-            )}
-          </PDFDownloadLink>
-          {/* </PDFDownloadLink> */}
-        </Button>
+        <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
+          {({ blob, url, loading, error }) => (
+            <div>
+              <Button
+                type="primary"
+                danger
+                className="pdfButton"
+                onClick={() =>
+                  handleOpenAndDownload({ blob, url, loading, error })
+                }
+              >
+                Generate Report
+              </Button>
+            </div>
+          )}
+        </PDFDownloadLink>
       </div>
     </>
   );
