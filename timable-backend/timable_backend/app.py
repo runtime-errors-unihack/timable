@@ -13,6 +13,8 @@ app = FastAPI(
     description="API for Timable",
     version="0.0.1",
 )
+path_to_resources = os.path.join("..", "resources")
+os.makedirs(path_to_resources, exist_ok=True)
 app.mount("/resources", StaticFiles(directory=os.path.join("..", "resources")), name="resources")
 app.include_router(users.router)
 app.include_router(session.router)

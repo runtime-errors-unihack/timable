@@ -36,7 +36,7 @@ class PinModel(BaseModel):
         description="The type of disability the pin is for"
     )
     user_id: int = Field(description="The ID of the user that created the pin")
-    description: Optional[str] = Field(
+    description: str | None = Field(
         description="A description of the pin", default=None
     )
 
@@ -60,4 +60,4 @@ class VoteModel(BaseModel):
 
 
 class VoteExtended(VoteModel):
-    id: Optional[int] = Field(description="The ID of the vote", default=None)
+    id: int | None = Field(description="The ID of the vote", default=None)
