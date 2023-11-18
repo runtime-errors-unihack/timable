@@ -1,88 +1,135 @@
 .staticCardsContainer {
   background: white;
   height: 100px;
-  width: 230px;
-  border-radius: 3px;
+  width: 210px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   margin: 20px 0px;
+  padding-top: 10px;
 }
 
-.staticCardsContainerFirst{
+.staticCardsContainerFirst {
   background: white;
   height: 100px;
-  width: 230px;
-  border-radius: 3px;
+  width: 210px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   margin-bottom: 20px;
+  padding-top: 10px;
 }
 
-.staticCardsContainerFirst:hover{
-  transform: scale(1.05)
+/* .staticCardsContainerFirst:hover {
+  transform: scale(1.05);
 }
 
-.staticCardsContainer:hover{
-  transform: scale(1.05)
-}
-
+.staticCardsContainer:hover {
+  transform: scale(1.05);
+} */
 
 .staticCardsTile {
-  font-size: 25px;
+  font-size: 20px;
+  height: 40px;
+  width: 210px;
+  display: flex;
+  justify-content: center;
+  font-weight: 500;
 }
 
-.staticCardsTileZone{
+.staticCardsTileZone {
   font-size: 20px;
+  display: flex;
+  font-weight: 500;
+}
+
+.tooltipIcon {
+  padding-left: 20px;
 }
 
 .staticCardsNumberAverage {
   font-size: 60px;
-  color: #db3f3f;
+  color: #ff4d4f;
 }
 
 .staticCardsNumberTotal {
   font-size: 60px;
-  color: #2d74ad;
+  color: #1677ff;
 }
 
 .staticCardsNumberClosed {
   font-size: 60px;
-  color: #006767;
+  color: #0F9C72;
 }
 
 .staticCardsBigContainer {
-  margin-left: 20px;
   min-width: 255px;
   padding-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .topList {
 }
 
 .zone {
-  font-size: 20px;
-  margin-bottom: 5px;
-  color: #006767;
+  font-size: 18px;
+  margin: 5px 0px;
+  color: black;
 }
 
 .staticCardZone {
   background: white;
   height: 110px;
-  width: 230px;
-  border-radius: 3px;
+  width: 210px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: 600;
+  font-weight: 500;
   margin: 20px 0px;
 }
 
-.staticCardZone:hover {
-  transform: scale(1.05)
+/* .staticCardZone:hover {
+  transform: scale(1.05);
+} */
+
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 260px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 110%;
+  left: 50%;
+  margin-left: -50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 13px;
+  text-align: left;
+}
+
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }

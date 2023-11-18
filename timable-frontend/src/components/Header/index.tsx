@@ -1,7 +1,9 @@
 import { FC } from "react";
 import "./index.styles.css";
-import { LogoutOutlined } from "@ant-design/icons";
+import Icon, { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+
+// import icon  from '../../../public/assets/logo.svg'
 
 const Header: FC = () => {
   const navigate = useNavigate();
@@ -17,15 +19,14 @@ const Header: FC = () => {
   return (
     <div className="headerContainer">
       <div onClick={() => handleGoHome()} className="headerTitle">
-        <span className="normalLetter">T</span>
-        <span className="whiteLetter">i</span>
-        <span className="normalLetter">mAble</span>
+      <Icon component={() => <img  className= 'headerLogo' src="/assets/logo.svg"/>} />
+      <Icon component={() => <img  className= 'headerLogoText' src="/assets/TimAble.svg"/>} />
       </div>
       {/* Render this when user is logged in */}
       <div className="logoutContainer">
         <div className="headerLogoContainer">
           {" "}
-          <LogoutOutlined className="headerLogo" />
+          <LogoutOutlined className="headerLogoOut" />
         </div>
         <div className="logoutText">Log Out</div>
       </div>

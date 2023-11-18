@@ -38,16 +38,23 @@ const DonutChart: FC = () => {
       if (type !== "Low Accessibility") {
         return "#0F9C72";
       }
-      return "#DB3F3F";
+      return "#ff4d4f";
     },
   };
 
   return (
-    <div className="whiteBorderDonut">
-      <div className="donutContainer">
-        <Pie {...config} className="donutChartComponent" />
+    <>
+      <div className="donutChartTitle">
+        City Accessibility Distribution: Proportion of Zones with Good and Poor
+        Accessibility{" "}
       </div>
-    </div>
+
+      <div className="whiteBorderDonut">
+        <div className="donutContainer">
+          <Pie {...config} className="donutChartComponent" />
+        </div>
+      </div>
+    </>
   );
 };
 export default DonutChart;

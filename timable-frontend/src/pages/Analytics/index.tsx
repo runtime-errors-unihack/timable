@@ -4,6 +4,7 @@ import DonutChart from "../../components/DonutChart";
 import ColumChart from "../../components/ColumnChart";
 import StaticCards from "../../components/StatisticCards";
 import TypeChart from "../../components/TypeChart";
+import { Button } from "antd";
 
 const Analytics: FC = () => {
 
@@ -20,7 +21,7 @@ const Analytics: FC = () => {
       <TypeChart/>
       <div className='buttonPdfContainer'>
       <StaticCards />
-      <div className="pdfButton" onClick = {() => generatePdf()}>Generate PDF</div>
+      <Button type="primary" className="pdfButton" onClick = {() => generatePdf()}>Generate PDF</Button>
       </div>
     </>
   );

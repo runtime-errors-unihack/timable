@@ -1,12 +1,11 @@
 .contentContainer {
   background-color: #011627;
-  width: 80%;
+  width: 90%;
   height: 100%;
-  min-width: 300px;
+  min-width: 1200px;
   padding: 20px 0px 0px 20px;
   display: flex;
-
   justify-content: center;
   align-items: center;
-  min-width: 1200px;
+
 }
