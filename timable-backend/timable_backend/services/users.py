@@ -9,11 +9,8 @@ from timable_backend.models import UserBase
 
 
 def hash_password(plain_text_password: str):
-    bytecode_password = plain_text_password.encode('UTF-8')
-    hashed_password = bcrypt.hashpw(
-        bytecode_password,
-        bcrypt.gensalt()
-    )
+    bytecode_password = plain_text_password.encode("UTF-8")
+    hashed_password = bcrypt.hashpw(bytecode_password, bcrypt.gensalt())
     return hashed_password
 
 
@@ -27,11 +24,11 @@ def create_db_user(user: UserBase):
         username=user.username,
         password=hash_password(user.password),
         email=user.email,
-        is_admin=user.is_admin,                 #TODO
-        profile_pic_url=user.profile_pic_url,   #TODO
+        is_admin=user.is_admin,  # TODO
+        profile_pic_url=user.profile_pic_url,  # TODO
         name=user.name,
         surname=user.surname,
-        phone=user.phone
+        phone=user.phone,
     )
     return new_user
 

@@ -25,5 +25,19 @@ class PinModel(BaseModel):
     longitude: float = Field(description="The pin's longitude")
     status: PinStatusEnum = Field(description="The status of the pin")
     image_url: str = Field(description="The URL of the Image")
-    disability_types: list[str] = Field(description="The type of disability the pin is for")
+    disability_types: list[str] = Field(
+        description="The type of disability the pin is for"
+    )
     user_id: int = Field(description="The ID of the user that created the pin")
+
+
+class VoteStateEnum(Enum):
+    POSITIVE = "positive"
+    NEUTRAL = "neutral"
+    NEGATIVE = "negative"
+
+
+class VoteModel(BaseModel):
+    user_id: int = Field(description="The ID of the user that votes the pin")
+    pin_id: int = Field(description="The ID of the pin")
+    state: VoteStateEnum = Field(description="The type of the vote")
