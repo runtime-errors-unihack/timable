@@ -1,12 +1,27 @@
-
-
-.zoneMapsBigContainer{
-height: 600px;
-width: 900px;
-background-color: white;
+.zoneMapsBigContainer {
+  height: 500px;
+  width: 900px;
+  background-color: #006767;
 }
 
-.topZonesPageContainer{
-    display: flex;
-    flex-direction: row;
+.topZonesPageContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.mapBorder {
+  background-color: rgba(255, 255, 255, 0.614);
+  padding: 10px;
+}
+
+.mapBigContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.mapTitle {
+  color: white;
+  margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 500;
 }

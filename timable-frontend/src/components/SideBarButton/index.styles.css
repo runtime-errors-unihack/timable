@@ -1,67 +1,37 @@
 .siderBarLink {
   display: flex;
-  background-color: white;
-  padding: 10px;
-  width: 220px;
-  border-radius: 10px;
-  margin: 30.5px 15px 5px 15px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #555555;
-  align-items: center;
+  padding: 5px;
+  width: 200px;
+  font-size: 25px;
+  font-weight: 500;
+  color: white;
+  /* align-items: center; */
   cursor: pointer;
-  border: 1px solid #2d74ad;
 }
 
 .firstSiderBarLink {
   display: flex;
-  background-color: white;
-  padding: 10px;
-  width: 220px;
-  border-radius: 10px;
-  margin: 0px 15px 5px 15px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #555555;
-  align-items: center;
-  cursor: pointer;
-  border: 1px solid #2d74ad;
-}
-
-.firstSiderBarLink:hover {
-  display: flex;
-  background-color: #011627;
-  padding: 10px;
-  width: 220px;
-  border-radius: 10px;
-  margin: 0px 15px 5px 15px;
-  font-size: 20px;
-  font-weight: 600;
+  padding: 5px;
+  width: 200px;
+  font-size: 25px;
+  font-weight: 500;
   color: white;
   align-items: center;
   cursor: pointer;
-  border: 1px solid transparent;
-}
-
-.siderBarLink:hover {
-  display: flex;
-  background-color: #011627;
-  padding: 10px;
-  width: 220px;
-  border-radius: 10px;
-  margin: 30.5px 15px 5px 15px;
-  font-size: 20px;
-  font-weight: 600;
-  color: white;
-  align-items: center;
-  cursor: pointer;
-  border: 1px solid transparent;
 }
 
 .sidebarIcon {
-  color: #555555;
-  font-size: 25px;
+  color: white;
+  font-size: 30px;
   padding-right: 10px;
+}
+
+.sidebarButtonsBigContainer{
+  height: 390px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-bottom: 80px;
 }
 
 

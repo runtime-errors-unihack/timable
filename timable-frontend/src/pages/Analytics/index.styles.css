@@ -1,24 +1,25 @@
-.chartContainers{
-    display: flex;
-    flex-direction: column;
-    margin-right: 20px;
+.chartContainers {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
 }
 
-.pdfButton{
-    background: #dd4949;
-    padding: 10px;
-    font-size: 27px;
-    color: white;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    width: 212px;
-    border-radius: 5px;
-
+.pdfButton {
+  background: #ff4d4f;
+  padding: 10px;
+  font-size: 20px;
+  color: white;
+  font-weight: 500;
+  /* text-align: center; */
+  cursor: pointer;
+  width: 210px;
+  /* border: 1px solid rgb(201, 10, 10); */
+  /* border-radius: 5px; */
+  border: none;
 }
 
-.buttonPdfContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.buttonPdfContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
