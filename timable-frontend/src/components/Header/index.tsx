@@ -7,38 +7,52 @@ import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  
-  const handleLogIn = () => {};
 
-  const handleRegistration = () => {};
+  const handleLogIn = () => {
+    navigate("/login");
+  };
+
+  const handleRegistration = () => {
+    navigate("/register")
+  };
 
   const handleGoHome = () => {
-    navigate('/');
+    navigate("/");
   };
+
+  const isUserLogged = localStorage.getItem("UserId");
 
   return (
     <div className="headerContainer">
       <div onClick={() => handleGoHome()} className="headerTitle">
-      <Icon component={() => <img  className= 'headerLogo' src="/assets/logo.svg"/>} />
-      <Icon component={() => <img  className= 'headerLogoText' src="/assets/TimAble.svg"/>} />
+        <Icon
+          component={() => (
+            <img className="headerLogo" src="/assets/logo.svg" />
+          )}
+        />
+        <Icon
+          component={() => (
+            <img className="headerLogoText" src="/assets/TimAble.svg" />
+          )}
+        />
       </div>
-      {/* Render this when user is logged in */}
-      <div className="logoutContainer">
-        <div className="headerLogoContainer">
-          {" "}
-          <LogoutOutlined className="headerLogoOut" />
-        </div>
-        <div className="logoutText">Log Out</div>
-      </div>
-      {/* <div className="logooutContianer">
-        <div className="logoutText">
-          <div onClick={() => handleLogIn()}>Login</div>
-          <div onClick={() => handleRegistration()} className="headerSeparator">
-            |
+      {isUserLogged ? (
+        <div className="logoutContainer">
+          <div className="headerLogoContainer">
+            {" "}
+            <LogoutOutlined className="headerLogoOut" />
           </div>
-          <div> Register</div>
+          <div className="logoutText">Log Out</div>
         </div>
-      </div> */}
+      ) : (
+        <div className="registerLoginContainer">
+          <div className="logoutText">
+            <div onClick={() => handleLogIn()}>Login</div>
+            <div className="headerSeparator">|</div>
+            <div onClick={() => handleRegistration()}> Register</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
