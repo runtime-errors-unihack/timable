@@ -75,7 +75,7 @@ const Analytics: FC = () => {
       textAlign: "center",
       marginTop: 20,
       fontWeight: 600,
-      marginBottom: 30
+      marginBottom: 30,
     },
 
     subTitle: {
@@ -167,6 +167,41 @@ const Analytics: FC = () => {
       fontSize: "10px",
       border: "1px solid black",
     },
+    cityAverage: {
+      fontSize: 16,
+      fontWeight: 600,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingLeft: 10
+    },
+    zoneTitle:{
+      margin: 5
+    },
+    cityAverageContainer: {
+      padding: 10,
+    },
+    cityScore: {
+      color: "#d14647",
+      fontSize: 16,
+      fontWeight: 700,
+    },
+    normalTextZone: {
+      fontSize: 14,
+      color: "#25a377"
+    },
+    topZonesContainer: {
+      padding: "20",
+      display: "flex",
+      justifyContent: "flex-start",
+      width: 400,
+      textAlign: "left",
+    },
+    zoneTitleTitle:{
+      marginLeft: 5,
+      fontSize: 14
+    }
   });
 
   const MyDoc = () => (
@@ -232,7 +267,12 @@ const Analytics: FC = () => {
           </View>
           {screenshotDonutChart && (
             <Image
-              style={{ marginTop: 10, width: 500, height: 230, paddingBottom: 20}}
+              style={{
+                marginTop: 10,
+                width: 500,
+                height: 230,
+                paddingBottom: 20,
+              }}
               src={screenshotDonutChart}
             />
           )}
@@ -291,6 +331,23 @@ const Analytics: FC = () => {
               src={screenshotColumnChart}
             />
           )}
+        </View>
+        <View style={styles.cityAverageContainer}>
+          <Text style={styles.cityAverage}>
+            City Average - <Text style={styles.cityScore}>5.67</Text>
+          </Text>
+        </View>
+        <View style={styles.topZonesContainer}>
+          <Text style={styles.zoneTitleTitle}>Top zones - according to the zone accessibility score</Text>
+          <View style={styles.zoneTitle}>
+            <Text style={styles.normalTextZone}> Lipovei -9.23 </Text>
+          </View>
+          <View style={styles.zoneTitle}>
+            <Text style={styles.normalTextZone}> Blascovici -7.27 </Text>
+          </View>
+          <View style={styles.zoneTitle}>
+            <Text style={styles.normalTextZone}> Circumvalatiunii - 8.34</Text>
+          </View>
         </View>
       </Page>
     </Document>
