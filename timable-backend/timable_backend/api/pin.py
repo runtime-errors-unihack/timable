@@ -23,7 +23,8 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         status=pin.status.value,
         image_url=pin.image_url,
         disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
-        user_id=pin.user_id
+        user_id=pin.user_id,
+        description=pin.description,
     )
 
     try:

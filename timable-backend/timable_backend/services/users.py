@@ -12,11 +12,11 @@ def create_db_user(user: UserBase):
         username=user.username,
         password=hash_password(user.password),
         email=user.email,
-        is_admin=user.is_admin,                 #TODO
-        profile_pic_url=user.profile_pic_url,   #TODO
+        is_admin=user.is_admin,  # TODO
+        profile_pic_url=user.profile_pic_url,  # TODO
         name=user.name,
         surname=user.surname,
-        phone=user.phone
+        phone=user.phone,
     )
     return new_user
 
