@@ -3,7 +3,7 @@ import { Marker, Popup } from "react-map-gl";
 import { FC, FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { ViewPortModel } from "../../models/view-port-model";
-import { PinModel, SendPinModel } from "../../models/pin-model";
+import { GetPinModel, SendPinModel } from "../../models/pin-model";
 import { PlaceModel } from "../../models/place-model";
 import {
   StatusEnum,
@@ -16,21 +16,16 @@ import {
 import "./index.styles.css";
 import FileUpload from "../FileUpload";
 import { hardCodedPins } from "../../utils/pinData";
-import { Select } from "antd";
-// import Register from "./components/Register";
-// import Login from "./components/Login";
+import { Select, Switch } from "antd";
+import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 
 const CityMap: FC = () => {
-  const myStorage = window.localStorage;
-  const [currentUsername, setCurrentUsername] = useState<string | null>(
-    myStorage.getItem("user")
-  );
   const [viewport, setViewport] = useState<ViewPortModel>({
-    latitude: 47.040182,
-    longitude: 17.071727,
-    zoom: 4,
+    latitude: 45.760696,
+    longitude: 21.226788,
+    zoom: 13,
   });
-  const [pins, setPins] = useState<Array<PinModel>>([]);
+  const [pins, setPins] = useState<Array<GetPinModel>>([]);
   const [currentPlaceId, setCurrentPlaceId] = useState<number | null>(null);
   const [newPlace, setNewPlace] = useState<PlaceModel | null>(null);
 
@@ -40,8 +35,24 @@ const CityMap: FC = () => {
   const [type, setType] = useState<string | null>(null);
   const [isAnonym, setIsAnonym] = useState<boolean>(false);
 
-  const [showRegister, setShowRegister] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
+  const [userName, setUserName] = useState<string>();
+
+    // useEffect(() => {
+  //   const getPins = async () => {
+  //     try {
+  //       const allPins = await axios.get("/pins");
+  //       setPins(allPins.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getPins();
+  // }, []);
+
+  const getUser = async (userId: number) => {
+    const response = await axios.get('url');
+    setUserName(response.data.name);
+  }
 
   const handleMarkerClick = (id: number, lat: number, long: number) => {
     setCurrentPlaceId(id);
@@ -55,10 +66,22 @@ const CityMap: FC = () => {
     });
   };
 
+  const handleStatusOnChange = (selectedStatus: string) => {
+    setStatus(selectedStatus);
+  };
+
+  const handleTypeOnChange = (selectedType: string) => {
+    setType(selectedType);
+  };
+
+  const handleSwitchOnChange = (checked: boolean) => {
+    setIsAnonym(checked);
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newPin: SendPinModel = {
-      userId: Number(myStorage.getItem("userId")) ?? 0,
+      userId: Number(localStorage.getItem("userId")) ?? 0,
       description,
       status,
       type,
@@ -74,23 +97,6 @@ const CityMap: FC = () => {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  // useEffect(() => {
-  //   const getPins = async () => {
-  //     try {
-  //       const allPins = await axios.get("/pins");
-  //       setPins(allPins.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getPins();
-  // }, []);
-
-  const handleLogout = () => {
-    setCurrentUsername(null);
-    myStorage.removeItem("user");
   };
 
   return (
@@ -126,16 +132,32 @@ const CityMap: FC = () => {
                 anchor="left"
               >
                 <div className="card">
-                  <label>Place</label>
-                  <h4 className="place">Trecere Pietoni</h4>
                   <label>Description</label>
-                  <p className="desc">{p.description}</p>
-                  <label>Votes</label>
-                  <label>Information</label>
+                  <h4 className="description">{p.description}</h4>
+
+                  <img
+                    src={p.imageURL}
+                    alt="Pin"
+                    width="500"
+                    height="600"
+                  ></img>
+
+                  <label>Status</label>
+                  <p className="status">{p.status}</p>
+
+                  <label>Type</label>
+                  <p className="type">{p.type}</p>
+
                   <span className="username">
                     Created by <b>Vlad</b>
                   </span>
-                  <span className="date">18.11.2023</span>
+
+                  <span className="date">{p.date}</span>
+
+                  <div className="votesContainer">
+                    <LikeOutlined className="like" />
+                    <DislikeOutlined className="unlike" />
+                  </div>
                 </div>
               </Popup>
             )}
@@ -173,20 +195,35 @@ const CityMap: FC = () => {
                       { value: StatusEnum.GOOD, label: "Accessible Zone" },
                       { value: StatusEnum.BAD, label: "In-Accessible Zone" },
                     ]}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value)}
+                    onChange={handleStatusOnChange}
                   ></Select>
 
                   <label>Type</label>
                   <Select
                     options={[
-                      { value: TypeEnum.VISUAL_IMPAIRMENT, label: "Visual Impairment" },
-                      { value: TypeEnum.PHYSICAL_IMPAIRMENT, label: "Physical Impairment" },
-                      { value: TypeEnum.AUDITORY_DISABILITIES, label: "Auditory Disability" },
+                      {
+                        value: TypeEnum.VISUAL_IMPAIRMENT,
+                        label: "Visual Impairment",
+                      },
+                      {
+                        value: TypeEnum.PHYSICAL_IMPAIRMENT,
+                        label: "Physical Impairment",
+                      },
+                      {
+                        value: TypeEnum.AUDITORY_DISABILITIES,
+                        label: "Auditory Disabilities",
+                      },
+                      {
+                        value: TypeEnum.AUDITORY_DISABILITIES,
+                        label: "Speech Disabilities",
+                      },
                     ]}
-                    onChange={(e) => setType(e.target.value)}
+                    onChange={handleTypeOnChange}
                     mode="multiple"
-                  >
-                  </Select>
+                  ></Select>
+
+                  <label>Add pin anonymous</label>
+                  <Switch className="switch" onChange={handleSwitchOnChange} />
 
                   <button type="submit" className="submitButton">
                     Add Pin
@@ -196,31 +233,6 @@ const CityMap: FC = () => {
             </Popup>
           </>
         )}
-        {/* {currentUsername ? (
-          <button className="button logout" onClick={handleLogout}>
-            Log out
-          </button>
-        ) : (
-          <div className="buttons">
-            <button className="button login" onClick={() => setShowLogin(true)}>
-              Log in
-            </button>
-            <button
-              className="button register"
-              onClick={() => setShowRegister(true)}
-            >
-              Register
-            </button>
-          </div>
-        )} */}
-        {/* {showRegister && <Register setShowRegister={setShowRegister} />}
-        {showLogin && (
-          <Login
-            setShowLogin={setShowLogin}
-            setCurrentUsername={setCurrentUsername}
-            myStorage={myStorage}
-          />
-        )} */}
       </Map>
     </div>
   );
