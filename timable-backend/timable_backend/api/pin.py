@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 from loguru import logger
+from sqlalchemy.orm import joinedload
 
-from timable_backend.db.db_models import PinModelDB
+from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB
 from timable_backend.db.session import get_db
 from timable_backend.models import PinModel
 from timable_backend.services.pin import get_pin_by_id
@@ -11,28 +12,36 @@ router = APIRouter(tags=["pin"])
 
 @router.post("/pin", description="Create a pin")
 async def create_pin(pin: PinModel, db=Depends(get_db)):
+    disability_types = [db.query(DisabilityTypeModelDB).filter_by(name=name).first() for name in pin.disability_types]
+    if not all(disability_types):
+        raise HTTPException(status_code=404, detail=f"Disability type not found.")
+
+    # Create the new pin with the disability_type relationship
     new_pin = PinModelDB(
         latitude=pin.latitude,
         longitude=pin.longitude,
         status=pin.status.value,
         image_url=pin.image_url,
-        type=pin.type,
-        # user_id=pin.user_id
-    ) #TODO user id relation
+        disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
+        user_id=pin.user_id
+    )
+
     try:
         db.add(new_pin)
         db.commit()
         db.refresh(new_pin)
     except Exception as e:
         logger.exception(e)
-        raise HTTPException(status_code=500, detail=f"Couldn't create pin.")
+        raise HTTPException(status_code=500, detail=f"Couldn't create pin. {str(e)}")
 
     return new_pin
 
 
 @router.get("/pin", description="Get all pins")
 async def get_pins(db=Depends(get_db)):
-    pins = db.query(PinModelDB).all()
+    pins = db.query(PinModelDB).options(
+        joinedload(PinModelDB.disability_types)
+    ).all()
     return pins
 
 

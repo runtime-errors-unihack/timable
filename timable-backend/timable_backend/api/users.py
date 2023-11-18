@@ -4,12 +4,12 @@ from sqlalchemy.orm import Session
 from ..db.db_models import UserModelDB
 from ..db.session import get_db
 from ..models import UserBase
-from ..services.users import create_db_user, hash_password, commit_user_to_db
+from ..services.users import create_db_user, hash_password, commit_user_to_db, get_db_user
 
 router = APIRouter(tags=["users"])
 
 
-@router.post("/users", description="Create a user", response_model=UserBase)
+@router.post("/users", description="Create a user", response_model=UserBase, )
 async def create_user(user: UserBase, db: Session = Depends(get_db)):
     new_user = create_db_user(user)
     commit_user_to_db(new_user, db, True)
@@ -18,16 +18,12 @@ async def create_user(user: UserBase, db: Session = Depends(get_db)):
 
 @router.get("/users", description="Get all users")
 async def get_users(db: Session = Depends(get_db)):
-    users = db.query(UserModelDB).all()
-    return users
+    return db.query(UserModelDB).all()
 
 
 @router.get("/users/{id}", description="Get a user by id")
 async def get_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(UserModelDB).filter(UserModelDB.id == id).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return get_db_user(id, db)
 
 
 @router.patch("/users/{id}", description="Update a user by id")

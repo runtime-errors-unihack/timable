@@ -1,4 +1,5 @@
 import bcrypt
+from fastapi import HTTPException
 from loguru import logger
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -33,6 +34,13 @@ def create_db_user(user: UserBase):
         phone=user.phone
     )
     return new_user
+
+
+def get_db_user(id: int, db: Session) -> UserModelDB:
+    user = db.query(UserModelDB).filter(UserModelDB.id == id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 
 def commit_user_to_db(user: UserModelDB, db: Session, add_user=False):

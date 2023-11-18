@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum, Float
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum, Float, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -50,15 +50,18 @@ class UserModelDB(BaseModel):
         String,
         nullable=True
     )
+    votes = relationship(
+        "VoteModelDB",
+        back_populates="user"
+    )
 
-    # pins = relationship(
-    #     "PinModelDB",
-    #     back_populates="user"
-    # )
-    # votes = relationship(
-    #     "VoteModelDB",
-    #     back_populates="user"
-    # )
+
+pin_disability_association = Table(
+    'pin_disability_association',
+    BaseModel.metadata,
+    Column('pin_id', Integer, ForeignKey('pins.id')),
+    Column('disability_type_id', Integer, ForeignKey('disability_types.id'))
+)
 
 
 class PinModelDB(BaseModel):
@@ -88,27 +91,21 @@ class PinModelDB(BaseModel):
         String,
         nullable=False
     )
-    type = Column(
-        String,
-        nullable=False
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id")
     )
-    # user_id = Column(
-    #     Integer,
-    #     ForeignKey("users.id")
-    # )
-    # type_id = Column(
-    #     Integer,
-    #     ForeignKey("pin_types.id")  # Add a foreign key to the PinTypeModelDB table
-    # )
-    #
-    # type = relationship(
-    #     "PinTypeModelDB",
-    #     back_populates="type"
-    # )
-    # user = relationship(
-    #     "UserModelDB",
-    #     back_populates="user"
-    # )
+
+    disability_types = relationship(
+        "DisabilityTypeModelDB",
+        secondary=pin_disability_association,
+        back_populates="pins"
+    )
+
+    votes = relationship(
+        "VoteModelDB",
+        back_populates="pin"
+    )
 
 
 class VoteModelDB(BaseModel):
@@ -119,24 +116,25 @@ class VoteModelDB(BaseModel):
         index=True,
         autoincrement=True
     )
-    # user_id = Column(
-    #     Integer,
-    #     ForeignKey("users.id")
-    # )
-    #
-    # pin_id = Column(
-    #     Integer,
-    #     ForeignKey("pins.id")
-    # )
-    #
-    # user = relationship(
-    #     "UserModelDB",
-    #     back_populates="votes"
-    # )
-    # pin = relationship(
-    #     "PinModelDB",
-    #     back_populates="votes"
-    # )
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id")
+    )
+
+    pin_id = Column(
+        Integer,
+        ForeignKey("pins.id")
+    )
+
+    user = relationship(
+        "UserModelDB",
+        back_populates="votes"
+    )
+
+    pin = relationship(
+        "PinModelDB",
+        back_populates="votes"
+    )
 
     positive = Column(
         Boolean,
@@ -144,8 +142,8 @@ class VoteModelDB(BaseModel):
     )
 
 
-class PinTypeModelDB(BaseModel):
-    __tablename__ = "pin_types"
+class DisabilityTypeModelDB(BaseModel):
+    __tablename__ = "disability_types"
     id = Column(
         Integer,
         primary_key=True,
@@ -156,7 +154,8 @@ class PinTypeModelDB(BaseModel):
         String,
         nullable=False
     )
-    # pin = relationship(
-    #     "PinModelDB",
-    #     back_populates="type"
-    # )
+    pins = relationship(
+        "PinModelDB",
+        secondary=pin_disability_association,
+        back_populates="disability_types"
+    )

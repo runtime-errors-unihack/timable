@@ -14,7 +14,7 @@ class UserBase(BaseModel):
     phone: str = Field(description="The user's phone number")
 
 
-class PinStatusEnum (Enum):
+class PinStatusEnum(Enum):
     GOOD = "good"
     BAD = "bad"
     CLOSED = "closed"
@@ -25,5 +25,5 @@ class PinModel(BaseModel):
     longitude: float = Field(description="The pin's longitude")
     status: PinStatusEnum = Field(description="The status of the pin")
     image_url: str = Field(description="The URL of the Image")
-    type: str = Field(description="The pin's category")
+    disability_types: list[str] = Field(description="The type of disability the pin is for")
     user_id: int = Field(description="The ID of the user that created the pin")

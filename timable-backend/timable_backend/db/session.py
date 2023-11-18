@@ -34,12 +34,14 @@ def create_database_if_not_exists(db_engine=None):
         logger.info("Database created.")
 
 
-def create_tables(metadata=None, db_engine=None, drop_all=False):
+def create_tables(metadata=None, db_engine=None, drop_all=False, excepted_tables: list = []):
     if not metadata:
         metadata = MetaData()
     if db_engine is None:
         db_engine = engine
     if drop_all:
-        metadata.drop_all(db_engine)
+        for table in reversed(metadata.sorted_tables):
+            if table not in excepted_tables:
+                table.drop(db_engine)
     metadata.create_all(db_engine)
     logger.info("Tables created.")
