@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 
 from ..db.db_models import UserModelDB
 from ..db.session import get_db
-from ..models import UserBase, UserExtended
+from ..models import UserBase, UserExtended, UserComplete
 from ..services.users import create_db_user, commit_user_to_db, get_db_user_by_id
 from ..services.jwt_session import hash_password
 
 router = APIRouter(tags=["users"])
 
 
-@router.post("/users", description="Create a user", response_model=UserExtended)
+@router.post("/users", description="Create a user", response_model=UserComplete)
 async def create_user(user: UserBase, db: Session = Depends(get_db)):
     new_user = create_db_user(user)
     commit_user_to_db(new_user, db, True)

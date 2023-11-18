@@ -12,8 +12,7 @@ router = APIRouter(tags=["pin"])
 
 @router.post("/pin", description="Create a pin")
 async def create_pin(pin: PinModel, db=Depends(get_db)):
-    all_disability_types = get_all_disability_types(db)
-    disability_types = [all_disability_types.filter_by(name=name).first() for name in pin.disability_types]
+    disability_types = [db.query(DisabilityTypeModelDB).filter_by(name=name).first() for name in pin.disability_types]
     if not all(disability_types):
         raise HTTPException(status_code=404, detail=f"Disability type not found.")
 
@@ -22,7 +21,6 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         latitude=pin.latitude,
         longitude=pin.longitude,
         status=pin.status.value,
-        image_url=pin.image_url,
         disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
         user_id=pin.user_id,
         description=pin.description,
@@ -40,7 +38,10 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
 
 
 @router.get("/pin", description="Get all pins by type")
-async def get_pins(disability_type: str, db=Depends(get_db)):
+async def get_pins(disability_type: str | None = None, db=Depends(get_db)):
+    if not disability_type:
+        return db.query(PinModelDB).all()
+
     # Fetch the specific disability type based on the pin_type
     disability_type = db.query(DisabilityTypeModelDB).filter_by(name=disability_type).first()
 

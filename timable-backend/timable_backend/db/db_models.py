@@ -12,7 +12,7 @@ class UserModelDB(BaseModel):
     username = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    profile_pic_url = Column(String, default=False, nullable=True)
+    profile_pic_url = Column(String, nullable=True, default=None)
     is_admin = Column(Boolean, default=False, nullable=False)
     name = Column(String, nullable=True)
     surname = Column(String, nullable=True)
@@ -40,7 +40,7 @@ class PinModelDB(BaseModel):
             "closed",
         )
     )
-    image_url = Column(String, nullable=False)
+    image_url = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     description = Column(String, nullable=True)
     disability_types = relationship(

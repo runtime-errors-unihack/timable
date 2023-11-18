@@ -13,7 +13,11 @@ class UserBase(BaseModel):
 
 
 class UserExtended(UserBase):
-    profile_pic_url: str = None
+    profile_pic_url: str | None = Field(description="The URL of the user's profile picture")
+
+
+class UserComplete(UserExtended):
+    id: int = Field(description="The ID of the user")
 
 
 class PinStatusEnum(Enum):
@@ -31,7 +35,6 @@ class PinModel(BaseModel):
     latitude: float = Field(description="The pin's latitude")
     longitude: float = Field(description="The pin's longitude")
     status: PinStatusEnum = Field(description="The status of the pin")
-    image_url: str = Field(description="The URL of the Image")
     disability_types: list[str] = Field(
         description="The type of disability the pin is for"
     )
@@ -39,6 +42,11 @@ class PinModel(BaseModel):
     description: str | None = Field(
         description="A description of the pin", default=None
     )
+
+
+class PinExtended(PinModel):
+    id: int = Field(description="The ID of the pin")
+    image_url: str | None = Field(description="The URL of the pin's image", default=None)
 
 
 class CreateSessionModel(BaseModel):

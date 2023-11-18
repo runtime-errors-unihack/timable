@@ -13,7 +13,6 @@ def create_db_user(user: UserBase):
         password=hash_password(user.password),
         email=user.email,
         is_admin=user.is_admin,
-        profile_pic_url=user.profile_pic_url,
         name=user.name,
         surname=user.surname,
         phone=user.phone,
