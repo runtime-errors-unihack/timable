@@ -1,6 +1,6 @@
 import { Column } from "@ant-design/plots";
 import { FC } from "react";
-import './index.styles.css'
+import "./index.styles.css";
 
 const ColumChart: FC = () => {
   const data = [
@@ -152,12 +152,15 @@ const ColumChart: FC = () => {
   };
   return (
     <>
-   
-    <div className="whiteBorder">
-      <div className="columnChart">
-        <Column {...config} />
+      <div className="columnChartTitle">
+        Monthly Issues Overview Chart: Trends in Issues Opened, Remaining Open,
+        and Closed
       </div>
-    </div>
+      <div className="whiteBorder">
+        <div className="columnChart">
+          <Column {...config} />
+        </div>
+      </div>
     </>
   );
 };

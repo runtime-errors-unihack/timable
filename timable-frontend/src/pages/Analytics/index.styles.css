@@ -7,17 +7,15 @@
 .pdfButton {
   background: #ff4d4f;
   padding: 10px;
-  font-size: 20px;
+  font-size: 18px !important;
   color: white;
-  font-weight: 500;
+  font-weight: 600 !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* text-align: center; */
   cursor: pointer;
+  height: 40px !important;
   width: 210px;
-  /* border: 1px solid rgb(201, 10, 10); */
-  /* border-radius: 5px; */
   border: none;
 }
 

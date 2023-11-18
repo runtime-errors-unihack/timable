@@ -376,17 +376,15 @@ const Analytics: FC = () => {
           <DonutChart />
         </div>
         <div id="column-chart">
-          {" "}
           <ColumChart />
         </div>
       </div>
-
       <div id="type-chart">
         <TypeChart />
       </div>
       <div className="buttonPdfContainer">
         <StaticCards />
-        <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
+        <PDFDownloadLink document={<MyDoc />} fileName="timAble - Report.pdf">
           {({ blob, url, loading, error }) => (
             <div>
               <Button
