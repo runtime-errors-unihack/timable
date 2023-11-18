@@ -13,7 +13,7 @@ const ZonesMap: FC = () => {
       type: "mapbox" as any,
       style: "blank",
       center: [45.7489, 21.2087] as any,
-      zoom: 3,
+      zoom: 1,
       pitch: 0,
     },
     source: {

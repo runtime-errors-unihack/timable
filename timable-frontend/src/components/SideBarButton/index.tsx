@@ -9,7 +9,11 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-const SideBarButtons: FC = () => {
+interface SideBarButtonsProps {
+  hideText?: boolean;
+}
+
+const SideBarButtons: FC<SideBarButtonsProps> = ({ hideText }) => {
   const navigate = useNavigate();
 
   const handleGoAboutUs = () => {
@@ -37,13 +41,13 @@ const SideBarButtons: FC = () => {
   };
 
   return (
-    <>
+    <div className="sidebarButtonsBigContainer">
       <div className="siderButtonContainer">
         <div className="firstSiderBarLink" onClick={() => handleGoHome()}>
           <div>
             <HomeOutlined className="sidebarIcon" />
           </div>
-          <div> Home</div>
+          {!hideText && <div> Home</div>}
         </div>
       </div>
 
@@ -52,7 +56,7 @@ const SideBarButtons: FC = () => {
           <div>
             <SketchOutlined className="sidebarIcon" />
           </div>
-          <div> Top Users</div>
+          {!hideText && <div> Top Users</div>}
         </div>
       </div>
 
@@ -61,16 +65,16 @@ const SideBarButtons: FC = () => {
           <div>
             <SketchOutlined className="sidebarIcon" />
           </div>
-          <div> Top Zones</div>
+          {!hideText && <div> Top Zones</div>}
         </div>
       </div>
-      
+
       <div className="siderButtonContainer">
         <div className="siderBarLink" onClick={() => handleGoAnalytics()}>
           <div>
             <AreaChartOutlined className="sidebarIcon" />
           </div>
-          <div> Analytics</div>
+          {!hideText && <div> Analytics</div>}
         </div>
       </div>
 
@@ -79,7 +83,7 @@ const SideBarButtons: FC = () => {
           <div>
             <SettingOutlined className="sidebarIcon" />
           </div>
-          <div> Settings</div>
+          {!hideText && <div> Settings</div>}
         </div>
       </div>
 
@@ -88,10 +92,10 @@ const SideBarButtons: FC = () => {
           <div>
             <InfoCircleOutlined className="sidebarIcon" />
           </div>
-          <div> About Us</div>
+          {!hideText && <div> About Us</div>}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

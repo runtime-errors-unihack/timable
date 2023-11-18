@@ -1,6 +1,6 @@
 .headerContainer {
-  height: 10%;
-  background-color: #2d74ad;
+  height: 7%;
+  background-color: #8DA9C4;
   font-family: "Roboto";
   display: flex;
   align-items: center;
@@ -15,6 +15,10 @@
   padding: 0px 20px;
   font-weight: 500;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px !important;
 }
 
 .whiteLetter {
@@ -42,11 +46,25 @@
   align-items: center;
 }
 
-.headerLogo {
+.headerLogoOut {
   font-size: 25px;
   color: white;
 }
 
 .headerSeparator {
   padding: 0px 10px;
+}
+
+
+.headerLogo{
+  height: 45px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerLogoText{
+  height: 140px;
+  width: 140px;
 }

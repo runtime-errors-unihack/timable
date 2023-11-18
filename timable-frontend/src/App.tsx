@@ -20,6 +20,7 @@ const App: FC = () => {
     <>
       <Header />
       <div className="layoutContainer">
+      <Sidebar />
         <Content>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -32,7 +33,7 @@ const App: FC = () => {
             <Route path="top-zones" element={<TopZones />} />
           </Routes>
         </Content>
-        <Sidebar />
+     
       </div>
       <Footer />
     </>

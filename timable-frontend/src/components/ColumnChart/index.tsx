@@ -132,7 +132,7 @@ const ColumChart: FC = () => {
     yField: "pins",
     seriesField: "name",
 
-    color: ["#2D74AD", "#DB3F3F", "#0F9C72"],
+    color: ["#1677ff", "#ff4d4f", "#0F9C72"],
 
     label: {
       position: "top" as any,
@@ -151,11 +151,14 @@ const ColumChart: FC = () => {
     },
   };
   return (
+    <>
+   
     <div className="whiteBorder">
       <div className="columnChart">
         <Column {...config} />
       </div>
     </div>
+    </>
   );
 };
 

@@ -27,3 +27,8 @@ class PinModel(BaseModel):
     image_url: str = Field(description="The URL of the Image")
     disability_types: list[str] = Field(description="The type of disability the pin is for")
     user_id: int = Field(description="The ID of the user that created the pin")
+
+
+class CreateSessionModel(BaseModel):
+    username: str = Field(description="The user's username")
+    password: str = Field(description="The user's password")
