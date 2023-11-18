@@ -6,13 +6,9 @@
   justify-content: center;
 }
 
-.status {
-  border: 1px solid black;
-}
-
 .card {
-  width: 250px;
-  height: 250px;
+  width: 350px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -20,7 +16,7 @@
 
 form {
   width: 350px;
-  height: 250px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,12 +26,28 @@ form {
 label {
   width: max-content;
   font-size: 16px;
-  margin: 3px 0;
+  margin-top: 3px;
   font-weight: bold;
 }
 
-.desc {
-  font-size: 14px;
+.description {
+  font-size: 16px;
+}
+
+.switch {
+  width: 4px;
+}
+
+.votesContainer {
+  display: flex;
+}
+
+.like {
+  cursor: pointer;
+}
+
+.unlike {
+  cursor: pointer;
 }
 
 .username {

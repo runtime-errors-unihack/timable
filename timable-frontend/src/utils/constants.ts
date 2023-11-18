@@ -22,5 +22,6 @@ export enum StatusEnum  {
 export enum TypeEnum  {
   VISUAL_IMPAIRMENT = 'visual',
   PHYSICAL_IMPAIRMENT = 'physical',
-  AUDITORY_DISABILITIES = 'auditory'
+  AUDITORY_DISABILITIES = 'auditory',
+  SPEECH_DISABILITIES = 'speech',
 }

@@ -1,0 +1,14 @@
+.formContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.formTitle {
+    color: white;
+}
+
+.input {
+    margin-bottom: 8px;
+}

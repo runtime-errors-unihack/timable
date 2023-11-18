@@ -34,6 +34,13 @@
   justify-content: space-between;
 }
 
+.registerLoginContainer {
+  display: flex;
+  width: 170px;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
 .logoutText {
   font-size: 25px;
   color: white;

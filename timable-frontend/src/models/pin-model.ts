@@ -1,11 +1,13 @@
-export interface PinModel {
+export interface GetPinModel {
     id: number;
+    description: string;
+    status: string;
+    type: string;
+    isAnonym: boolean;
     latitude: number;
     longitude: number;
-    status: string;
     imageURL: string;
-    type: string;
-    description: string;
+    date: string;
 }
 
 export interface SendPinModel {

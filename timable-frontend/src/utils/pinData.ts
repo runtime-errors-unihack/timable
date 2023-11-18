@@ -1,22 +1,26 @@
-import { PinModel } from "../models/pin-model";
+import { GetPinModel } from "../models/pin-model";
 
-export const hardCodedPins: Array<PinModel> = [
+export const hardCodedPins: Array<GetPinModel> = [
   {
     id: 0,
+    description: "desc",
+    status: "bad",
+    type: "typeExample",
+    isAnonym: false,
     latitude: 45.790696,
     longitude: 21.296788,
-    status: "bad",
     imageURL: "url",
-    type: "typeExample",
-    description: "desc",
+    date: new Date().toLocaleString(),
   },
   {
     id: 1,
+    description: "desc",
+    status: "bad",
+    type: "typeExample",
+    isAnonym: false,
     latitude: 45.760696,
     longitude: 21.226788,
-    status: "bad",
     imageURL: "url",
-    type: "typeExample",
-    description: "desc",
+    date: new Date().toLocaleString(),
   },
 ];
