@@ -37,22 +37,22 @@ const CityMap: FC = () => {
 
   const [userName, setUserName] = useState<string>();
 
-    // useEffect(() => {
-  //   const getPins = async () => {
-  //     try {
-  //       const allPins = await axios.get("/pins");
-  //       setPins(allPins.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getPins();
-  // }, []);
+    useEffect(() => {
+    const getPins = async () => {
+      try {
+        const allPins = await axios.get("http://localhost:8000/pin");
+        setPins(allPins.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getPins();
+  }, []);
 
-  const getUser = async (userId: number) => {
-    const response = await axios.get('url');
-    setUserName(response.data.name);
-  }
+  // const getUser = async (userId: number) => {
+  //   const response = await axios.get('url');
+  //   setUserName(response.data.name);
+  // }
 
   const handleMarkerClick = (id: number, lat: number, long: number) => {
     setCurrentPlaceId(id);
@@ -81,17 +81,18 @@ const CityMap: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newPin: SendPinModel = {
-      userId: Number(localStorage.getItem("userId")) ?? 0,
+      user_id: 1,
       description,
       status,
-      type,
-      isAnonym,
+      disability_types: ['visual'],
+      is_anonymous: isAnonym,
       latitude: newPlace?.latitude ?? 0,
       longitude: newPlace?.longitude ?? 0,
     };
 
     try {
-      const res = await axios.post("/pins", newPin);
+      const res = await axios.post("http://localhost:8000/pin", newPin);
+      console.log(res);
       setPins([...pins, res.data]);
       setNewPlace(null);
     } catch (err) {
@@ -109,7 +110,7 @@ const CityMap: FC = () => {
         onMove={(e: ViewStateChangeEvent) => setViewport(e.viewState)}
         onDblClick={handleAddClick}
       >
-        {hardCodedPins.map((p) => (
+        {pins.map((p) => (
           <>
             <Marker latitude={p.latitude} longitude={p.longitude}>
               <svg
@@ -222,7 +223,7 @@ const CityMap: FC = () => {
                     mode="multiple"
                   ></Select>
 
-                  <label>Add pin anonymous</label>
+                  <label>Post Anonymously</label>
                   <Switch className="switch" onChange={handleSwitchOnChange} />
 
                   <button type="submit" className="submitButton">

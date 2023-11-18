@@ -11,11 +11,11 @@ export interface GetPinModel {
 }
 
 export interface SendPinModel {
-    userId: number;
+    user_id: number;
     description: string | null;
     status: string | null;
-    type: string | null;
-    isAnonym: boolean;
+    disability_types: Array<string | null>;
+    is_anonymous: boolean;
     latitude: number;
     longitude: number;
 }
