@@ -1,25 +1,10 @@
-import bcrypt
 from fastapi import HTTPException
 from loguru import logger
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from timable_backend.db.db_models import UserModelDB
 from timable_backend.models import UserBase
-
-
-def hash_password(plain_text_password: str):
-    bytecode_password = plain_text_password.encode('UTF-8')
-    hashed_password = bcrypt.hashpw(
-        bytecode_password,
-        bcrypt.gensalt()
-    )
-    return hashed_password
-
-
-def verify_password(plain_text_password: str, hashed_password: str):
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    return pwd_context.verify(plain_text_password, hashed_password)
+from timable_backend.services.jwt_session import hash_password
 
 
 def create_db_user(user: UserBase):
@@ -36,8 +21,15 @@ def create_db_user(user: UserBase):
     return new_user
 
 
-def get_db_user(id: int, db: Session) -> UserModelDB:
+def get_db_user_by_id(id: int, db: Session) -> UserModelDB:
     user = db.query(UserModelDB).filter(UserModelDB.id == id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+def get_db_user_by_username(username: str, db: Session) -> UserModelDB:
+    user = db.query(UserModelDB).filter(UserModelDB.username == username).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
