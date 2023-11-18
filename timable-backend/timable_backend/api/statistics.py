@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy import func
 
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, pin_disability_association
 from timable_backend.db.session import get_db
