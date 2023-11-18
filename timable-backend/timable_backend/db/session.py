@@ -21,6 +21,7 @@ def get_db():
     try:
         yield db
     except Exception as e:
+        logger.exception(e)
         logger.error(f"Database-level error occurred. Details: {str(e)}")
     finally:
         db.close()

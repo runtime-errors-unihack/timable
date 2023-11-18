@@ -1,4 +1,3 @@
-from typing import Optional
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -8,16 +7,24 @@ class UserBase(BaseModel):
     email: str = Field(description="The user's email")
     password: str = Field(description="The user's password")
     is_admin: bool = Field(description="Whether the user is an admin", default=False)
-    profile_pic_url: str = Field(description="The user's profile picture location")
     name: str = Field(description="The user's name")
     surname: str = Field(description="The user's surname")
     phone: str = Field(description="The user's phone number")
+
+
+class UserExtended(UserBase):
+    profile_pic_url: str = None
 
 
 class PinStatusEnum(Enum):
     GOOD = "good"
     BAD = "bad"
     CLOSED = "closed"
+
+
+class ResourceLocationEnum(Enum):
+    PROFILE_PICS = "profile_pics"
+    PIN_PICS = "pin_pics"
 
 
 class PinModel(BaseModel):
