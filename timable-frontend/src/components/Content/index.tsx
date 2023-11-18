@@ -1,7 +1,5 @@
 import { FC, ReactNode } from "react";
 import "./index.styles.css";
-import ColumChart from "../ColumnChart";
-import StaticCards from "../StatisticCards";
 
 interface ContentProps {
   children: ReactNode;
