@@ -48,7 +48,14 @@ class ResourceLocationEnum(Enum):
 
 
 class PinTagEnum(Enum):
+    """
+    "parking", "toilet", "elevator", "ramp", "stairs", "other"
+    """
     PARKING = "parking"
+    TOILET = "toilet"
+    ELEVATOR = "elevator"
+    RAMP = "ramp"
+    STAIRS = "stairs"
 
 
 class PinModel(BaseModel):

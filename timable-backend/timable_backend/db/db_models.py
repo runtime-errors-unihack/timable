@@ -43,7 +43,7 @@ class PinModelDB(BaseModel):
         )
     )
     tag = Column(
-        Enum("parking")
+        Enum("parking", "toilet", "elevator", "ramp", "stairs", "other", nullable=True)
     )
     image_url = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
