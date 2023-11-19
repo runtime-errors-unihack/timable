@@ -20,6 +20,7 @@ def create_db_user(user: UserBase):
         surname=user.surname,
         phone=user.phone,
     )
+    logger.debug(f"Created user {new_user.name}. Is admin: {new_user.is_admin}.")
     return new_user
 
 

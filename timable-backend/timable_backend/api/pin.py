@@ -8,14 +8,15 @@ from sqlalchemy.orm import joinedload
 
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, VoteModelDB
 from timable_backend.db.session import get_db
-from timable_backend.models import PinModel, PinStatusEnum, VoteModel, PinTagEnum
+from timable_backend.models import PinModel, PinStatusEnum, PinTagEnum
+from timable_backend.services.jwt_session import get_current_session
 from timable_backend.services.pin import get_pin_by_id
 
 router = APIRouter(tags=["pin"])
 
 
 @router.post("/pin", description="Create a pin")
-async def create_pin(pin: PinModel, db=Depends(get_db)):
+async def create_pin(pin: PinModel, db=Depends(get_db), session=Depends(get_current_session)):
     disability_types = [db.query(DisabilityTypeModelDB).filter_by(name=name).first() for name in pin.disability_types]
     if not all(disability_types):
         raise HTTPException(status_code=404, detail=f"Disability type not found.")
@@ -102,7 +103,7 @@ async def get_pin(pin_id: int, db=Depends(get_db)):
 
 
 @router.delete("/pin/{pin_id}", description="Delete a pin by id")
-async def delete_pin(pin_id: int, db=Depends(get_db)):
+async def delete_pin(pin_id: int, db=Depends(get_db), session=Depends(get_current_session)):
     found_pin = get_pin_by_id(pin_id, db)
     try:
         db.delete(found_pin)
@@ -114,7 +115,7 @@ async def delete_pin(pin_id: int, db=Depends(get_db)):
 
 
 @router.patch("/pin/{pin_id}", description="Update a pin picture url by id")
-async def update_pin(pin_id: int, path_to_file: str | None = None, db=Depends(get_db)):
+async def update_pin(pin_id: int, path_to_file: str | None = None, db=Depends(get_db), session=Depends(get_current_session)):
     found_pin = get_pin_by_id(pin_id, db)
     if found_pin is None:
         raise HTTPException(status_code=404, detail="Pin not found")

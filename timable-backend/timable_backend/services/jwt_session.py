@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
+from fastapi.security import OAuth2AuthorizationCodeBearer, OAuth2PasswordBearer
 from loguru import logger
 from passlib.context import CryptContext
 from jose import jwt
+from starlette import status
+
 from timable_backend.db.db_models import UserModelDB
 from timable_backend.models import UserComplete
 
@@ -62,3 +65,24 @@ def hash_password(plain_text_password: str):
         bcrypt.gensalt()
     )
     return hashed_password
+
+
+# bearer with CreateSession body
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/session", scheme_name="Bearer")
+
+
+def get_current_session(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        token = token.replace("Bearer ", "")
+        payload = get_jwt_session(token)
+    except HTTPException as e:
+        raise credentials_exception from e
+
+    return payload
+
+

@@ -4,6 +4,7 @@ from loguru import logger
 from timable_backend.db.db_models import VoteModelDB
 from timable_backend.db.session import get_db
 from timable_backend.models import VoteModel, VoteExtended
+from timable_backend.services.jwt_session import get_current_session
 from timable_backend.services.pin import get_pin_by_id
 from timable_backend.services.users import get_db_user_by_id
 from timable_backend.services.vote import get_vote_by_id
@@ -22,7 +23,7 @@ async def get_vote(id: int, db=Depends(get_db)):
 
 
 @router.post("/vote", description="Create a vote", response_model=VoteExtended)
-async def create_vote(vote: VoteModel, db=Depends(get_db)):
+async def create_vote(vote: VoteModel, db=Depends(get_db), session=Depends(get_current_session)):
     get_db_user_by_id(vote.user_id, db)
     get_pin_by_id(vote.pin_id, db)
     vote_exists = (
@@ -46,7 +47,7 @@ async def create_vote(vote: VoteModel, db=Depends(get_db)):
 
 
 @router.patch("/vote/{id}", description="Update a vote by ID", response_model=VoteExtended)
-async def update_vote(id: int, vote: VoteModel, db=Depends(get_db)):
+async def update_vote(id: int, vote: VoteModel, db=Depends(get_db), session=Depends(get_current_session)):
     db_vote = get_vote_by_id(id, db)
     if db_vote.state == vote.state.value:
         return db_vote
@@ -58,7 +59,7 @@ async def update_vote(id: int, vote: VoteModel, db=Depends(get_db)):
 @router.delete(
     "/vote/{id}", description="Delete a vote by ID", response_model=VoteExtended
 )
-async def delete_vote(vote_id: int, db=Depends(get_db)):
+async def delete_vote(vote_id: int, db=Depends(get_db), session=Depends(get_current_session)):
     found_vote = get_vote_by_id(vote_id, db)
     try:
         db.delete(found_vote)

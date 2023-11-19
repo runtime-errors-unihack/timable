@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException
 from loguru import logger
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 from ..db.db_models import UserModelDB
 from ..db.session import get_db
-from ..models import UserBase, UserExtended, UserComplete, UserEdit
+from ..models import UserBase, UserComplete, UserEdit
 from ..services.users import create_db_user, commit_user_to_db, get_db_user_by_id, get_users_pins_votes
-from ..services.jwt_session import hash_password
+from ..services.jwt_session import hash_password, get_current_session
 
 router = APIRouter(tags=["users"])
 
@@ -24,13 +24,14 @@ async def get_users(db: Session = Depends(get_db)):
     return get_users_pins_votes(db)
 
 
+
 @router.get("/users/{id}", description="Get a user by id")
 async def get_user(id: int, db: Session = Depends(get_db)):
     return get_db_user_by_id(id, db)
 
 
 @router.patch("/users/{id}", description="Update a user by id", response_model=UserComplete)
-async def update_user(id: int, user: UserEdit, db: Session = Depends(get_db)):
+async def update_user(id: int, user: UserEdit, db: Session = Depends(get_db), session=Depends(get_current_session)):
     db_user = db.query(UserModelDB).filter(UserModelDB.id == id).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")

@@ -3,11 +3,9 @@ import os
 
 from fastapi import APIRouter, Depends
 from loguru import logger
-from sqlalchemy import func
-
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB
 from timable_backend.db.session import get_db
-from timable_backend.models import UserComplete
+from timable_backend.services.jwt_session import get_current_session
 from timable_backend.services.statistics import get_area_score
 from timable_backend.services.users import get_users_pins_votes
 
@@ -15,7 +13,7 @@ router = APIRouter(prefix="/statistics", tags=["statistics"])
 
 
 @router.get("/pins-per-disability-type", description="Get the number of pins per disability type")
-async def get_pins_per_disability_type(db=Depends(get_db)):
+async def get_pins_per_disability_type(db=Depends(get_db), session=Depends(get_current_session)):
     pins = db.query(PinModelDB).all()
     disability_types = db.query(DisabilityTypeModelDB).all()
 
