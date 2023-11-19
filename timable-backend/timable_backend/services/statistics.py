@@ -1,5 +1,3 @@
-from http.client import HTTPException
-
 from fastapi import Depends
 from shapely import Polygon, Point
 

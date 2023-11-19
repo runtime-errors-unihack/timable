@@ -42,6 +42,9 @@ class PinModelDB(BaseModel):
             "closed",
         )
     )
+    tag = Column(
+        Enum("parking", "toilet", "elevator", "ramp", "stairs", "other", nullable=True)
+    )
     image_url = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     description = Column(String, nullable=True)
@@ -52,6 +55,7 @@ class PinModelDB(BaseModel):
     )
     is_anonymous = Column(Boolean, default=False, nullable=True)
     date_created = Column(DateTime, default=func.now(), nullable=False)
+
 
     votes = relationship("VoteModelDB", back_populates="pin")
     user = relationship("UserModelDB", back_populates="pins")
