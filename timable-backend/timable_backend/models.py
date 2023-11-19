@@ -47,10 +47,15 @@ class ResourceLocationEnum(Enum):
     PIN_PICS = "pin_pics"
 
 
+class PinTagEnum(Enum):
+    PARKING = "parking"
+
+
 class PinModel(BaseModel):
     latitude: float = Field(description="The pin's latitude")
     longitude: float = Field(description="The pin's longitude")
     status: PinStatusEnum = Field(description="The status of the pin")
+    tag: PinTagEnum | None = Field(description="The tag of the pin", default=None)
     disability_types: list[str] = Field(
         description="The type of disability the pin is for"
     )

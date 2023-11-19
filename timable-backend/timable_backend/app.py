@@ -38,7 +38,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def initialize_database():
     create_database_if_not_exists()
-    create_tables(metadata=BaseModel.metadata, drop_all=True)
+    create_tables(metadata=BaseModel.metadata, drop_all=False)
 
 
 @app.exception_handler(Exception)
