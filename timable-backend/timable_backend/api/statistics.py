@@ -32,7 +32,7 @@ async def get_pins_per_disability_type(db=Depends(get_db)):
 
 @router.get("/area-accessibility-score", description="Get the average score of an area")
 async def calculate_average_area_score(db=Depends(get_db)):
-    file_path = os.path.join("timable_backend", "db", "data.json")
+    file_path = os.path.join("db", "data.json")
     with open(file_path, "r") as file:
         data = json.load(file)
     score_dict = {}
