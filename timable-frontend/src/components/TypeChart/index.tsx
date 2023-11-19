@@ -3,24 +3,38 @@ import ReactDOM from "react-dom";
 import { Column } from "@ant-design/plots";
 import { ColumnConfig } from "@ant-design/plots";
 import "./index.styles.css";
+import { GetPinModel } from "../../models/pin-model";
+import { TypeEnum } from "../../utils/constants";
 
-const TypeChart: FC = () => {
+interface TypeChartProps {
+  pins: GetPinModel[];
+}
+
+const TypeChart: FC<TypeChartProps> = ({ pins }) => {
   const data = [
     {
       type: "Visual Impairment",
-      value: 67,
+      value: pins.filter(
+        (pin) => pin.disability_types[0].name === TypeEnum.VISUAL_IMPAIRMENT
+      ).length,
     },
     {
       type: "Physical Impairment",
-      value: 122,
+      value: pins.filter(
+        (pin) => pin.disability_types[0].name === TypeEnum.PHYSICAL_IMPAIRMENT
+      ).length,
     },
     {
       type: "Speech Disabilities",
-      value: 34,
+      value: pins.filter(
+        (pin) => pin.disability_types[0].name === TypeEnum.SPEECH_DISABILITIES
+      ).length,
     },
     {
       type: "Auditory Disabilities",
-      value: 33,
+      value: pins.filter(
+        (pin) => pin.disability_types[0].name === TypeEnum.AUDITORY_DISABILITIES
+      ).length,
     },
   ] as any;
   const paletteSemanticRed = "#F4664A";
@@ -63,8 +77,7 @@ const TypeChart: FC = () => {
   return (
     <div className="typeChartBigContainer">
       <div className="columnChartTitle">
-        Disability-Related Issues: Breakdown by
-        Category
+        Disability-Related Issues: Breakdown by Category
       </div>
       <div className="typeChartContainer">
         <Column {...config} />

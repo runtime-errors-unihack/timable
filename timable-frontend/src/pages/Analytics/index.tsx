@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "./index.styles.css";
 import DonutChart from "../../components/DonutChart";
 import ColumChart from "../../components/ColumnChart";
@@ -13,9 +13,11 @@ import {
   PDFDownloadLink,
   StyleSheet,
   Image,
-  Font,
 } from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
+import axios from "axios";
+import { GetPinModel } from "../../models/pin-model";
+import { StatusEnum, TypeEnum } from "../../utils/constants";
 
 const Analytics: FC = () => {
   const [screenshotTypeChart, setScreenshotTypeChart] = useState<null | string>(
@@ -59,6 +61,46 @@ const Analytics: FC = () => {
     };
 
     captureAndSetScreenshots();
+  }, []);
+
+  const [pins, setPins] = useState<Array<GetPinModel>>([]);
+  const [cityAverage, setCityAverage] = useState<number>();
+  const [firstThree, setFirstThree] = useState<[string, unknown][]>([]);
+
+  useEffect(() => {
+    const getPins = async () => {
+      const allPins = await axios.get("http://localhost:8000/pin");
+      setPins(allPins.data);
+    };
+    getPins();
+  }, []);
+
+  useEffect(() => {
+    const getStatistics = async () => {
+      const statistics = await axios.get(
+        "http://localhost:8000/statistics/area-accessibility-score"
+      );
+      let counter = 0;
+      let sum = 0;
+      if (statistics.data) {
+        Object.entries(statistics.data).forEach(([key, value]: any) => {
+          counter = counter + 1;
+          sum = sum + value;
+        });
+        setCityAverage(counter ? sum / counter : 0);
+        const sortedArray = Object.entries(statistics.data).sort(
+          ([, valueA]: any, [, valueB]: any) => {
+            if (valueA < valueB) return -1;
+            if (valueA > valueB) return 1;
+            return 0;
+          }
+        );
+        setFirstThree(
+          sortedArray.slice(sortedArray.length - 3, sortedArray.length)
+        );
+      }
+    };
+    getStatistics();
   }, []);
 
   const today = new Date();
@@ -174,10 +216,10 @@ const Analytics: FC = () => {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      paddingLeft: 10
+      paddingLeft: 10,
     },
-    zoneTitle:{
-      margin: 5
+    zoneTitle: {
+      margin: 5,
     },
     cityAverageContainer: {
       padding: 10,
@@ -189,7 +231,7 @@ const Analytics: FC = () => {
     },
     normalTextZone: {
       fontSize: 14,
-      color: "#25a377"
+      color: "#25a377",
     },
     topZonesContainer: {
       padding: "20",
@@ -198,10 +240,10 @@ const Analytics: FC = () => {
       width: 400,
       textAlign: "left",
     },
-    zoneTitleTitle:{
+    zoneTitleTitle: {
       marginLeft: 5,
-      fontSize: 14
-    }
+      fontSize: 14,
+    },
   });
 
   const MyDoc = () => (
@@ -222,10 +264,44 @@ const Analytics: FC = () => {
               <Text style={styles.category}>Speech Disabilities</Text>
             </View>
             <View style={styles.tableColumn}>
-              <Text style={styles.category}>323</Text>
-              <Text style={styles.category}>33</Text>
-              <Text style={styles.category}>23</Text>
-              <Text style={styles.category}>434</Text>
+              <Text style={styles.category}>
+                {
+                  pins.filter(
+                    (pin) =>
+                      pin.disability_types[0].name ===
+                      TypeEnum.VISUAL_IMPAIRMENT
+                  ).length
+                }
+              </Text>
+              <Text style={styles.category}>
+                {" "}
+                {
+                  pins.filter(
+                    (pin) =>
+                      pin.disability_types[0].name ===
+                      TypeEnum.PHYSICAL_IMPAIRMENT
+                  ).length
+                }
+              </Text>
+              <Text style={styles.category}>
+                {
+                  pins.filter(
+                    (pin) =>
+                      pin.disability_types[0].name ===
+                      TypeEnum.AUDITORY_DISABILITIES
+                  ).length
+                }
+              </Text>
+              <Text style={styles.category}>
+                {" "}
+                {
+                  pins.filter(
+                    (pin) =>
+                      pin.disability_types[0].name ===
+                      TypeEnum.SPEECH_DISABILITIES
+                  ).length
+                }
+              </Text>
             </View>
           </View>
 
@@ -261,8 +337,22 @@ const Analytics: FC = () => {
               <Text style={styles.category}>Non-Accessible</Text>
             </View>
             <View style={styles.tableColumn}>
-              <Text style={styles.category}>67%</Text>
-              <Text style={styles.category}>33%</Text>
+              <Text style={styles.category}>
+                {(
+                  (pins.filter((pin) => pin.status === StatusEnum.GOOD).length /
+                    pins.length) *
+                  100
+                ).toFixed(2)}
+                %
+              </Text>
+              <Text style={styles.category}>
+                {(
+                  (pins.filter((pin) => pin.status === StatusEnum.BAD).length /
+                    pins.length) *
+                  100
+                ).toFixed(2)}
+                %
+              </Text>
             </View>
           </View>
           {screenshotDonutChart && (
@@ -294,36 +384,228 @@ const Analytics: FC = () => {
           </View>
           <View style={styles.rowContainer}>
             <Text style={styles.normalTextTable}>Total issues added</Text>
-            <Text style={styles.rowLastChartCell}>123</Text>
-            <Text style={styles.rowLastChartCell}>343</Text>
-            <Text style={styles.rowLastChartCell}>45</Text>
-            <Text style={styles.rowLastChartCell}>33</Text>
-            <Text style={styles.rowLastChartCell}>434</Text>
-            <Text style={styles.rowLastChartCell}>54</Text>
-            <Text style={styles.rowLastChartCell}>55</Text>
-            <Text style={styles.rowLastChartCell}>23</Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 10 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 9 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 8 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 7 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 6 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 5 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 4 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 3 &&
+                    (pin.status === StatusEnum.BAD ||
+                      pin.status === StatusEnum.CLOSED)
+                ).length
+              }
+            </Text>
           </View>
           <View style={styles.rowContainer}>
             <Text style={styles.normalTextTable}>Issues Closed</Text>
-            <Text style={styles.rowLastChartCell}>13</Text>
-            <Text style={styles.rowLastChartCell}>33</Text>
-            <Text style={styles.rowLastChartCell}>5</Text>
-            <Text style={styles.rowLastChartCell}>33</Text>
-            <Text style={styles.rowLastChartCell}>44</Text>
-            <Text style={styles.rowLastChartCell}>5</Text>
-            <Text style={styles.rowLastChartCell}>51</Text>
-            <Text style={styles.rowLastChartCell}>20</Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 10 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 9 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 8 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 7 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 6 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 5 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 4 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 3 &&
+                    pin.status === StatusEnum.CLOSED
+                ).length
+              }
+            </Text>
           </View>
           <View style={styles.rowContainer}>
             <Text style={styles.normalTextTable}>Remaining Issues</Text>
-            <Text style={styles.rowLastChartCell}>11</Text>
-            <Text style={styles.rowLastChartCell}>2</Text>
-            <Text style={styles.rowLastChartCell}>33</Text>
-            <Text style={styles.rowLastChartCell}>11</Text>
-            <Text style={styles.rowLastChartCell}>32</Text>
-            <Text style={styles.rowLastChartCell}>12</Text>
-            <Text style={styles.rowLastChartCell}>3</Text>
-            <Text style={styles.rowLastChartCell}>3</Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 10 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 9 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 8 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 7 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 6 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 5 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 4 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
+            <Text style={styles.rowLastChartCell}>
+              {pins.length -
+                pins.filter(
+                  (pin) =>
+                    new Date(pin.date_created).getMonth() === 3 &&
+                    pin.status === StatusEnum.BAD
+                ).length}
+            </Text>
           </View>
           {screenshotColumnChart && (
             <Image
@@ -334,20 +616,37 @@ const Analytics: FC = () => {
         </View>
         <View style={styles.cityAverageContainer}>
           <Text style={styles.cityAverage}>
-            City Average - <Text style={styles.cityScore}>5.67</Text>
+            City Average -{" "}
+            <Text style={styles.cityScore}>
+              {(cityAverage ? cityAverage * 100 : 0).toFixed(2)}
+            </Text>
           </Text>
         </View>
         <View style={styles.topZonesContainer}>
-          <Text style={styles.zoneTitleTitle}>Top zones - according to the zone accessibility score</Text>
-          <View style={styles.zoneTitle}>
-            <Text style={styles.normalTextZone}> Lipovei -9.23 </Text>
-          </View>
-          <View style={styles.zoneTitle}>
-            <Text style={styles.normalTextZone}> Blascovici -7.27 </Text>
-          </View>
-          <View style={styles.zoneTitle}>
-            <Text style={styles.normalTextZone}> Circumvalatiunii - 8.34</Text>
-          </View>
+          <Text style={styles.zoneTitleTitle}>
+            Top zones - according to the zone accessibility score
+          </Text>
+          {firstThree.length && (
+            <>
+              <View style={styles.zoneTitle}>
+                <Text style={styles.normalTextZone}>
+                  {" "}
+                  {`${firstThree[0][0] ?? ""} ${firstThree[0][1] ?? 0}`}{" "}
+                </Text>
+              </View>
+              <View style={styles.zoneTitle}>
+                <Text style={styles.normalTextZone}>
+                  {`${firstThree[1][0] ?? ""} ${firstThree[1][1] ?? 0}`}{" "}
+                </Text>
+              </View>
+              <View style={styles.zoneTitle}>
+                <Text style={styles.normalTextZone}>
+                  {" "}
+                  {`${firstThree[2][0] ?? ""} ${firstThree[2][1] ?? 0}`}
+                </Text>
+              </View>
+            </>
+          )}
         </View>
       </Page>
     </Document>
@@ -373,17 +672,35 @@ const Analytics: FC = () => {
     <>
       <div className="chartContainers">
         <div id="donut-chart">
-          <DonutChart />
+          <DonutChart
+            high={(
+              (pins.filter((pin) => pin.status === StatusEnum.GOOD).length /
+                pins.length) *
+              100
+            ).toFixed(2)}
+            low={(
+              (pins.filter((pin) => pin.status === StatusEnum.BAD).length /
+                pins.length) *
+              100
+            ).toFixed(2)}
+          />
         </div>
         <div id="column-chart">
           <ColumChart />
         </div>
       </div>
       <div id="type-chart">
-        <TypeChart />
+        <TypeChart pins={pins} />
       </div>
       <div className="buttonPdfContainer">
-        <StaticCards />
+        <StaticCards
+          totalPins={pins.length}
+          closedPins={
+            pins.filter((pin) => pin.status === StatusEnum.CLOSED).length
+          }
+          cityAverage={cityAverage ?? 0}
+          topZones={firstThree}
+        />
         <PDFDownloadLink document={<MyDoc />} fileName="timAble - Report.pdf">
           {({ blob, url, loading, error }) => (
             <div>
