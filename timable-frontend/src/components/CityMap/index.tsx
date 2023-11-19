@@ -7,6 +7,7 @@ import { GetPinModel, SendPinModel } from "../../models/pin-model";
 import { PlaceModel } from "../../models/place-model";
 import {
   StatusEnum,
+  TagEnum,
   TypeEnum,
   badPinStyle,
   goodPinStyle,
@@ -21,7 +22,11 @@ import { Select, Switch } from "antd";
 import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import { VoteModel } from "../../models/vote-model";
 
-const CityMap: FC = () => {
+interface CityMapProps {
+  updatedPins: Array<GetPinModel>;
+}
+
+const CityMap: FC<CityMapProps> = ({ updatedPins }) => {
   const [viewport, setViewport] = useState<ViewPortModel>({
     latitude: 45.760696,
     longitude: 21.226788,
@@ -33,12 +38,15 @@ const CityMap: FC = () => {
   const [description, setDescription] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const [tag, setTag] = useState<string | null>(null);
   const [disabilityTypes, setDisabilityTypes] = useState<Array<string>>([]);
   const [isAnonym, setIsAnonym] = useState<boolean>(false);
   const [userId, setUserId] = useState<number>();
   const [upVotes, setUpVotes] = useState<number>();
   const [downVotes, setDownVotes] = useState<number>();
   const [hasVoted, setHasVoted] = useState<boolean>(false);
+  const [votedPositive, setVotedPositive] = useState<boolean>(false);
+  const [votedNegative, setVotedNegative] = useState<boolean>(false);
 
   useEffect(() => {
     const getPins = async () => {
@@ -57,6 +65,10 @@ const CityMap: FC = () => {
     getUserDetails();
     getPins();
   }, []);
+
+  useEffect(() => {
+    if (updatedPins.length !== 0) setPins(updatedPins);
+  }, [updatedPins]);
 
   const handleMarkerClick = (
     id: number,
@@ -79,6 +91,11 @@ const CityMap: FC = () => {
 
   const handleStatusOnChange = (selectedStatus: string) => {
     setStatus(selectedStatus);
+  };
+
+  const handleTagSelection = (value: string) => {
+    console.log('',value)
+    setTag(value);
   };
 
   const handleDisabilityTypesOnChange = (selectedType: Array<string>) => {
@@ -108,6 +125,7 @@ const CityMap: FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    console.log(tag)
     e.preventDefault();
     const fileURL = await uploadFile();
     const newPin: SendPinModel = {
@@ -118,6 +136,7 @@ const CityMap: FC = () => {
       is_anonymous: isAnonym,
       latitude: newPlace?.latitude ?? 0,
       longitude: newPlace?.longitude ?? 0,
+      tag: tag ?? null ,
     };
 
     const pin = await axios.post("http://localhost:8000/pin", newPin);
@@ -179,46 +198,74 @@ const CityMap: FC = () => {
                   anchor="left"
                 >
                   <div className="card">
-                    <label>Description</label>
+                    <label>Pin Description</label>
                     <h4 className="description">{pin.description}</h4>
 
-                    <a
-                      href={`http://localhost:8000${pin.image_url}`}
-                      target="_blank"
-                    >
-                      <img
-                        src={`http://localhost:8000${pin.image_url}`}
-                        alt="Pin"
-                        width="150"
-                        height="100"
-                      ></img>
-                    </a>
+                    {pin?.image_url !== undefined &&
+                      pin?.image_url !== null && (
+                        <a
+                          href={`http://localhost:8000${pin.image_url}`}
+                          target="_blank"
+                        >
+                          <img
+                            src={`http://localhost:8000${pin.image_url}`}
+                            alt="Pin"
+                            width="150"
+                            height="100"
+                          ></img>
+                        </a>
+                      )}
 
-                    <label>Status</label>
-                    <p className="status">{pin.status}</p>
+                    <label>Pin Status</label>
+                    <p className="status">
+                      {pin.status === "good"
+                        ? "Accessible Zone"
+                        : pin.status === "bad"
+                        ? "In-Accessible Zone"
+                        : "Closed Issue"}
+                    </p>
+                    {pin.tag !== null && (
+                      <>
+                        <label>Tag</label> <div>{pin?.tag}</div>
+                      </>
+                    )}
 
-                    <div>Type/s:</div>
+                    <label>
+                      {pin?.disability_types.length > 1
+                        ? "Disability Type"
+                        : " Disability Types"}
+                    </label>
                     {pin?.disability_types?.map((type) => {
                       return (
-                        <b key={type.id} className="type">
-                          {type.name}
-                        </b>
+                        <div key={type.id} className="type">
+                          {type.name.toUpperCase() +
+                            `${
+                              type.name === "visual" || type.name === "physical"
+                                ? " IMPAIRMENT"
+                                : " DISABILITIES"
+                            }`}
+                        </div>
                       );
                     })}
 
                     {!pin.is_anonymous && (
-                      <p>
-                        Created by <b>{pin?.user?.username}</b>
-                      </p>
+                      <>
+                        <label>Created by</label>
+                        <div>{pin?.user?.username}</div>
+                      </>
                     )}
-
+                    <label>Date</label>
                     <p>
-                      Date created <b>{pin.date_created}</b>
+                      <div>{pin.date_created.split("T")[0]}</div>
                     </p>
 
                     <div className="votesContainer">
+                      <p className="votesNumber">{upVotes}</p>
                       <LikeOutlined
                         onClick={() => {
+                          if (votedPositive) return;
+                          setVotedNegative(false);
+                          setVotedPositive(true);
                           setUpVotes((prevUpVotes) =>
                             prevUpVotes !== undefined ? prevUpVotes + 1 : 0
                           );
@@ -233,9 +280,13 @@ const CityMap: FC = () => {
                         }}
                         className="like"
                       />
-                      <p>{upVotes}</p>
+
+                      <p className="votesNumber">{downVotes}</p>
                       <DislikeOutlined
                         onClick={() => {
+                          if (votedNegative) return;
+                          setVotedNegative(true);
+                          setVotedPositive(false);
                           setDownVotes((prevDownVotes) =>
                             prevDownVotes !== undefined ? prevDownVotes + 1 : 0
                           );
@@ -248,7 +299,6 @@ const CityMap: FC = () => {
                         }}
                         className="unlike"
                       />
-                      <p>{downVotes}</p>
                     </div>
                   </div>
                 </Popup>
@@ -275,6 +325,8 @@ const CityMap: FC = () => {
                 <form onSubmit={handleSubmit}>
                   <label>Description</label>
                   <textarea
+                    maxLength={500}
+                    className="pinDescriptionTextArea"
                     placeholder="Describe the problem."
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -289,6 +341,17 @@ const CityMap: FC = () => {
                       { value: StatusEnum.BAD, label: "In-Accessible Zone" },
                     ]}
                     onChange={handleStatusOnChange}
+                  ></Select>
+
+                  <label>Tag</label>
+                  <Select
+                    options={[
+                      {
+                        value: TagEnum.PARKING_LOT,
+                        label: "Parking Lot",
+                      },
+                    ]}
+                    onChange={handleTagSelection}
                   ></Select>
 
                   <label>Types</label>
@@ -307,7 +370,7 @@ const CityMap: FC = () => {
                         label: "Auditory Disabilities",
                       },
                       {
-                        value: TypeEnum.AUDITORY_DISABILITIES,
+                        value: TypeEnum.SPEECH_DISABILITIES,
                         label: "Speech Disabilities",
                       },
                     ]}

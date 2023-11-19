@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 from ..db.db_models import UserModelDB
 from ..db.session import get_db
 from ..models import UserBase, UserExtended, UserComplete, UserEdit
-from ..services.users import create_db_user, commit_user_to_db, get_db_user_by_id
+from ..services.users import create_db_user, commit_user_to_db, get_db_user_by_id, get_users_pins_votes
 from ..services.jwt_session import hash_password
 
 router = APIRouter(tags=["users"])
@@ -21,10 +21,7 @@ async def create_user(user: UserBase, db: Session = Depends(get_db)):
 @router.get("/users", description="Get all users")
 async def get_users(db: Session = Depends(get_db)):
     # for each user, also add it's votes and pins
-    return db.query(UserModelDB).options(
-        joinedload(UserModelDB.pins),
-        joinedload(UserModelDB.votes)
-    ).all()
+    return get_users_pins_votes(db)
 
 
 @router.get("/users/{id}", description="Get a user by id")

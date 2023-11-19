@@ -3,15 +3,24 @@
   width: 12%;
   display: flex;
   align-items: center;
-  background-color:#000f1c;
+  background-color: #000f1c;
   /* border-right: 2px solid rgba(255, 255, 255, 0.27); */
   /* justify-content: center; */
 }
 
-.goIconSidebar{
+.goIconSidebar {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.sidebarContainerHide {
+  height: 100%;
+  width: 12%;
+  display: flex;
+  align-items: center;
+  background-color: #000f1c;
+  display: none;
 }
 
 .siderBackground {
@@ -26,7 +35,7 @@
   padding: 20px 0px 20px 0px;
 }
 
-.headerLogoInSidebar{
+.headerLogoInSidebar {
   display: flex;
   justify-content: center;
   align-items: center;

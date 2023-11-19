@@ -1,8 +1,11 @@
-from fastapi import HTTPException
+from typing import Type
+
+from fastapi import HTTPException, Depends
 from loguru import logger
 from sqlalchemy.orm import Session, joinedload
 
 from timable_backend.db.db_models import UserModelDB
+from timable_backend.db.session import get_db
 from timable_backend.models import UserBase
 from timable_backend.services.jwt_session import hash_password
 
@@ -46,3 +49,10 @@ def commit_user_to_db(user: UserModelDB, db: Session, add_user=False):
     except Exception as e:
         logger.error(f"Couldn't add user {user} to db. Reason: {e}")
         raise e
+
+
+def get_users_pins_votes(db: Session = Depends(get_db)) -> list[Type[UserModelDB]]:
+    return db.query(UserModelDB).options(
+        joinedload(UserModelDB.pins),
+        joinedload(UserModelDB.votes)
+    ).all()

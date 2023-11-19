@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, VoteModelDB
 from timable_backend.db.session import get_db
-from timable_backend.models import PinModel, PinStatusEnum, VoteModel
+from timable_backend.models import PinModel, PinStatusEnum, VoteModel, PinTagEnum
 from timable_backend.services.pin import get_pin_by_id
 
 router = APIRouter(tags=["pin"])
@@ -25,6 +25,7 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         latitude=pin.latitude,
         longitude=pin.longitude,
         status=pin.status.value,
+        tag=pin.tag.value if pin.tag else None,
         disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
         user_id=pin.user_id,
         description=pin.description,
@@ -52,6 +53,7 @@ async def get_pins(
     min_votes: int | None = None,
     max_votes: int | None = None,
     status: PinStatusEnum | None = None,
+    tag: PinTagEnum | None = None,
     db=Depends(get_db)
 ):
     # Filter by disability type
@@ -75,7 +77,9 @@ async def get_pins(
         ).filter(PinModelDB.disability_types.contains(disability_type_instance))
 
     if status is not None:
-        query = query.filter(PinModelDB.status == status)
+        query = query.filter(PinModelDB.status == status.value)
+    if tag is not None:
+        query = query.filter(PinModelDB.tag == tag.value)
     if months_ago is not None:
         start_date = datetime.utcnow() - timedelta(days=30 * months_ago)
         query = query.filter(PinModelDB.date_created >= start_date)

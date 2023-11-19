@@ -67,33 +67,38 @@ const Register: FC = () => {
         <Alert message="Register successful! You will be redirected to login." type="success" />
       )}
         <h1 className="formTitle">Register</h1>
+        <div className="formLabel">Email</div>
         <Input
           className="input"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
         />
+        <div className="formLabel">Username</div>
         <Input
           className="input"
           placeholder="Username"
           onChange={(e) => setUserName(e.target.value)}
         />
+        <div className="formLabel">Password</div>
         <Input.Password
           className="input"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div className="formLabel">Confirm Password</div>
         <Input.Password
           className="input"
           placeholder="Confirm Password"
           onChange={(e) => setConformPassword(e.target.value)}
         />
+        <div className="formLabel">Phone Number</div>
         <Input
           className="input"
           placeholder="Phone Number"
           onChange={(e) => setPhone(e.target.value)}
         />
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <Button type="primary" danger onClick={() => registerUser()}>
+        <Button className="registerButton"type="primary" danger onClick={() => registerUser()}>
           Create Account
         </Button>
       </div>

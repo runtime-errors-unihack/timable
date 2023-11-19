@@ -38,3 +38,6 @@ export enum TypeEnum  {
   SPEECH_DISABILITIES = 'speech',
 }
 
+export enum TagEnum  {
+  PARKING_LOT = 'parking'
+}

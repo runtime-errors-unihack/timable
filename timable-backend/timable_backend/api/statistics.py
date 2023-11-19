@@ -3,10 +3,13 @@ import os
 
 from fastapi import APIRouter, Depends
 from loguru import logger
+from sqlalchemy import func
 
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB
 from timable_backend.db.session import get_db
+from timable_backend.models import UserComplete
 from timable_backend.services.statistics import get_area_score
+from timable_backend.services.users import get_users_pins_votes
 
 router = APIRouter(prefix="/statistics", tags=["statistics"])
 
@@ -42,3 +45,24 @@ async def calculate_average_area_score(db=Depends(get_db)):
         logger.exception(e)
         raise e
     return score_dict
+
+
+@router.get("/top-users", description="Get top users")
+async def get_top_users(limit: int | None = 10, db=Depends(get_db)):
+    user_contributers = get_users_pins_votes(db)
+
+    # Calculate scores and populate the dictionary
+    for user_contributer in user_contributers:
+        user_contributer.score = len(user_contributer.pins) * 5 + len(user_contributer.votes)
+
+    # Sort the user objects by scores in descending order
+    sorted_users = sorted(user_contributers, key=lambda x: x.score, reverse=True)
+
+    # Take the top 10 user objects
+    top_10_users = sorted_users[:limit]
+
+    # Optionally, you can create a list of dictionaries with usernames and scores
+    result_list = [{"username": user.username, "score": user.score} for user in top_10_users]
+
+    return result_list
+

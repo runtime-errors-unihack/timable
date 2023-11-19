@@ -41,7 +41,6 @@ const Login: FC = () => {
       } catch (e) {
         setErrorMessage("Username or password is incorrect!");
       }
-    
     }
   };
 
@@ -55,18 +54,25 @@ const Login: FC = () => {
           />
         )}
         <h1 className="formTitle">Login</h1>
+        <div className="formLabel">Username</div>
         <Input
           className="input"
           placeholder="Username"
           onChange={(e) => setUserName(e.target.value)}
         />
+        <div className="formLabel">Password</div>
         <Input.Password
           className="input"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <Button type="primary" danger onClick={() => registerUser()}>
+        <Button
+          className="loginButton"
+          type="primary"
+          danger
+          onClick={() => registerUser()}
+        >
           Login
         </Button>
       </div>
