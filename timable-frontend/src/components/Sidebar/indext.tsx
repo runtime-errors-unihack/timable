@@ -8,7 +8,7 @@ const Sidebar = () => {
     <>
       <div className="sidebarContainer">
         <div className="siderBackground">
-          <Icon
+          <Icon className="goIconSidebar"
             component={() => (
               <img className="headerLogoInSidebar" src="/assets/logo.svg" />
             )}

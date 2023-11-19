@@ -1,4 +1,4 @@
-import React, { useState , FC} from "react";
+import React, { useState, FC } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -10,7 +10,7 @@ const TopUsers: FC = () => {
 
   const handleCopy = () => {
     // Trigger a notification using react-toastify
-    toast.success('Page link copied to clipboard: ' + pageLink, {
+    toast.success("Page link copied to clipboard: " + pageLink, {
       position: "bottom-right",
       autoClose: 3000, // 3 seconds
       hideProgressBar: false,
@@ -24,6 +24,10 @@ const TopUsers: FC = () => {
       <div className="topUsers">
         <div id="header">
           <div className="titleTopUsers">Ranking</div>
+        </div>
+        <div className="descriptionRank">
+          User ranking based on the contribution of the user to the community,
+          showcased through pin creation and interaction. Start Mapping! Start Changing!
         </div>
         <div id="leaderboard">
           <div className="ribbon"></div>
@@ -62,7 +66,9 @@ const TopUsers: FC = () => {
             </tr>
           </table>
           <CopyToClipboard text={pageLink} onCopy={handleCopy}>
-           <div id="buttons"><button className="continue">Share Link</button></div> 
+            <div id="buttons">
+              <button className="continue">Share Link</button>
+            </div>
           </CopyToClipboard>
           <ToastContainer />
         </div>

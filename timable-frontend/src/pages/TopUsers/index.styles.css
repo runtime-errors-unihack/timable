@@ -151,4 +151,12 @@ td {
   background-color: white;
   width: 50%;
   height: 90%;
+
+}
+
+.descriptionRank{
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0px 20px 20px 20px;
+  text-align: center;
 }
