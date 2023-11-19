@@ -66,6 +66,11 @@ class PinModel(BaseModel):
     is_anonymous: bool | None = Field(description="Whether the vote is anonymous", default=False)
 
 
+class CreateSessionModel(BaseModel):
+    username: str = Field(description="The user's username")
+    password: str = Field(description="The user's password")
+
+
 class VoteStateEnum(Enum):
     POSITIVE = "positive"
     NEUTRAL = "neutral"
