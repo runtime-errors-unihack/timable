@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB
 from timable_backend.db.session import get_db
 from timable_backend.models import PinModel
-from timable_backend.services.pin import get_pin_by_id
+from timable_backend.services.pin import get_pin_by_id, get_all_disability_types
 
 router = APIRouter(tags=["pin"])
 
@@ -21,9 +21,10 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         latitude=pin.latitude,
         longitude=pin.longitude,
         status=pin.status.value,
-        image_url=pin.image_url,
         disability_types=disability_types,  # List containing DisabilityTypeModelDB objects
-        user_id=pin.user_id
+        user_id=pin.user_id,
+        description=pin.description,
+        is_anonymous=pin.is_anonymous,
     )
 
     try:
@@ -37,11 +38,23 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
     return new_pin
 
 
-@router.get("/pin", description="Get all pins")
-async def get_pins(db=Depends(get_db)):
+@router.get("/pin", description="Get all pins by type")
+async def get_pins(disability_type: str | None = None, db=Depends(get_db)):
+    if not disability_type:
+        return db.query(PinModelDB).all()
+
+    # Fetch the specific disability type based on the pin_type
+    disability_type = db.query(DisabilityTypeModelDB).filter_by(name=disability_type).first()
+
+    # Check if the disability type exists
+    if not disability_type:
+        raise HTTPException(status_code=404, detail=f"Disability type not found.")
+
+    # Use the joinedload to retrieve pins with the specified disability type
     pins = db.query(PinModelDB).options(
         joinedload(PinModelDB.disability_types)
-    ).all()
+    ).filter(PinModelDB.disability_types.contains(disability_type)).all()
+
     return pins
 
 
@@ -60,3 +73,21 @@ async def delete_pin(pin_id: int, db=Depends(get_db)):
     except Exception as e:
         logger.error(f"Couldn't delete pin with id{pin_id}. Reason: {e}")
         raise HTTPException(status_code=403, detail=f"Couldn't delete pin.")
+
+
+@router.patch("/pin/{pin_id}", description="Update a pin picture url by id")
+async def update_pin(pin_id: int, path_to_file: str | None = None, db=Depends(get_db)):
+    found_pin = get_pin_by_id(pin_id, db)
+    if found_pin is None:
+        raise HTTPException(status_code=404, detail="Pin not found")
+    if path_to_file:
+        setattr(found_pin, "image_url", path_to_file)
+
+    try:
+        db.commit()
+        db.refresh(found_pin)
+    except Exception as e:
+        logger.error(f"Couldn't add found {found_pin} to db. Reason: {e}")
+        raise e
+    return found_pin
+
