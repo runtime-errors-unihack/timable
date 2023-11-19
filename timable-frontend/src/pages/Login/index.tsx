@@ -36,7 +36,7 @@ const Login: FC = () => {
         localStorage.setItem("token", response.data);
         setShowAlert(true);
         setTimeout(() => {
-          navigate("/home");
+          navigate("/");
         }, 3000);
       } catch (e) {
         setErrorMessage("Username or password is incorrect!");

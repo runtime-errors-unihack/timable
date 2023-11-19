@@ -8,16 +8,18 @@ import { PlaceModel } from "../../models/place-model";
 import {
   StatusEnum,
   TypeEnum,
+  badPinStyle,
+  goodPinStyle,
+  initialPinStyle,
   mapBoxAccessToken,
   mapStyle,
   pinIcon,
-  pinStyle,
 } from "../../utils/constants";
 import "./index.styles.css";
 import FileUpload from "../FileUpload";
-import { hardCodedPins } from "../../utils/pinData";
 import { Select, Switch } from "antd";
 import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
+import { VoteModel } from "../../models/vote-model";
 
 const CityMap: FC = () => {
   const [viewport, setViewport] = useState<ViewPortModel>({
@@ -28,33 +30,40 @@ const CityMap: FC = () => {
   const [pins, setPins] = useState<Array<GetPinModel>>([]);
   const [currentPlaceId, setCurrentPlaceId] = useState<number | null>(null);
   const [newPlace, setNewPlace] = useState<PlaceModel | null>(null);
-
   const [description, setDescription] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  const [type, setType] = useState<string | null>(null);
+  const [disabilityTypes, setDisabilityTypes] = useState<Array<string>>([]);
   const [isAnonym, setIsAnonym] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number>();
+  const [upVotes, setUpVotes] = useState<number>();
+  const [downVotes, setDownVotes] = useState<number>();
+  const [hasVoted, setHasVoted] = useState<boolean>(false);
 
-  const [userName, setUserName] = useState<string>();
-
-    useEffect(() => {
+  useEffect(() => {
     const getPins = async () => {
-      try {
-        const allPins = await axios.get("http://localhost:8000/pin");
-        setPins(allPins.data);
-      } catch (err) {
-        console.log(err);
-      }
+      const allPins = await axios.get("http://localhost:8000/pin");
+      setPins(allPins.data);
     };
+    const getUserDetails = async () => {
+      const token = localStorage.getItem("token");
+      const user = await axios.get("http://localhost:8000/session", {
+        params: { session: token },
+      });
+      setUserId(user.data.id);
+    };
+    getUserDetails();
     getPins();
   }, []);
 
-  // const getUser = async (userId: number) => {
-  //   const response = await axios.get('url');
-  //   setUserName(response.data.name);
-  // }
-
-  const handleMarkerClick = (id: number, lat: number, long: number) => {
+  const handleMarkerClick = (
+    id: number,
+    lat: number,
+    long: number,
+    votes: Array<VoteModel>
+  ) => {
+    setUpVotes(votes?.filter((vote) => vote.state === "positive").length);
+    setDownVotes(votes?.filter((vote) => vote.state === "negative").length);
     setCurrentPlaceId(id);
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
@@ -70,34 +79,61 @@ const CityMap: FC = () => {
     setStatus(selectedStatus);
   };
 
-  const handleTypeOnChange = (selectedType: string) => {
-    setType(selectedType);
+  const handleDisabilityTypesOnChange = (selectedType: Array<string>) => {
+    setDisabilityTypes(selectedType);
   };
 
   const handleSwitchOnChange = (checked: boolean) => {
     setIsAnonym(checked);
   };
 
+  const uploadFile = async () => {
+    if (file) {
+      const fileInFormData = new FormData();
+      fileInFormData.append("file", file);
+      const fileURL = await axios.post(
+        "http://localhost:8000/images",
+        fileInFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          params: { resource_location: "pin_pics" },
+        }
+      );
+      return fileURL.data.filename;
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const fileURL = await uploadFile();
     const newPin: SendPinModel = {
-      user_id: 1,
+      user_id: userId ?? 1,
       description,
       status,
-      disability_types: ['visual'],
+      disability_types: disabilityTypes,
       is_anonymous: isAnonym,
       latitude: newPlace?.latitude ?? 0,
       longitude: newPlace?.longitude ?? 0,
     };
 
-    try {
-      const res = await axios.post("http://localhost:8000/pin", newPin);
-      console.log(res);
-      setPins([...pins, res.data]);
-      setNewPlace(null);
-    } catch (err) {
-      console.log(err);
+    const pin = await axios.post("http://localhost:8000/pin", newPin);
+    const pinWithFile = await axios.patch(
+      `http://localhost:8000/pin/${pin.data.id}?path_to_file=${fileURL}`
+    );
+    setPins([...pins, pinWithFile.data]);
+    setNewPlace(null);
+  };
+
+  const addPinColorBasedOnStatus = (status: string) => {
+    if (status === "good") {
+      return goodPinStyle;
     }
+    if (status === "bad") {
+      return badPinStyle;
+    }
+    return initialPinStyle;
   };
 
   return (
@@ -110,64 +146,119 @@ const CityMap: FC = () => {
         onMove={(e: ViewStateChangeEvent) => setViewport(e.viewState)}
         onDblClick={handleAddClick}
       >
-        {pins.map((p) => (
-          <>
-            <Marker latitude={p.latitude} longitude={p.longitude}>
-              <svg
-                height={40}
-                viewBox="0 0 24 24"
-                style={pinStyle}
-                onClick={() => handleMarkerClick(p.id, p.latitude, p.longitude)}
-              >
-                <path d={pinIcon} />
-              </svg>
-            </Marker>
-            {p.id === currentPlaceId && (
-              <Popup
-                key={p.id}
-                latitude={p.latitude}
-                longitude={p.longitude}
-                closeButton={true}
-                closeOnClick={false}
-                onClose={() => setCurrentPlaceId(null)}
-                anchor="left"
-              >
-                <div className="card">
-                  <label>Description</label>
-                  <h4 className="description">{p.description}</h4>
+        {pins.map((pin) => {
+          console.log(pin);
+          return (
+            <div key={pin.id}>
+              <Marker latitude={pin.latitude} longitude={pin.longitude}>
+                <svg
+                  height={40}
+                  viewBox="0 0 24 24"
+                  style={addPinColorBasedOnStatus(pin.status)}
+                  onClick={() =>
+                    handleMarkerClick(
+                      pin.id,
+                      pin.latitude,
+                      pin.longitude,
+                      pin.votes
+                    )
+                  }
+                >
+                  <path d={pinIcon} />
+                </svg>
+              </Marker>
+              {pin.id === currentPlaceId && (
+                <Popup
+                  key={pin.id}
+                  latitude={pin.latitude}
+                  longitude={pin.longitude}
+                  closeButton={true}
+                  closeOnClick={false}
+                  onClose={() => setCurrentPlaceId(null)}
+                  anchor="left"
+                >
+                  <div className="card">
+                    <label>Description</label>
+                    <h4 className="description">{pin.description}</h4>
 
-                  <img
-                    src={p.imageURL}
-                    alt="Pin"
-                    width="500"
-                    height="600"
-                  ></img>
+                    <a
+                      href={`http://localhost:8000${pin.image_url}`}
+                      target="_blank"
+                    >
+                      <img
+                        src={`http://localhost:8000${pin.image_url}`}
+                        alt="Pin"
+                        width="150"
+                        height="100"
+                      ></img>
+                    </a>
 
-                  <label>Status</label>
-                  <p className="status">{p.status}</p>
+                    <label>Status</label>
+                    <p className="status">{pin.status}</p>
 
-                  <label>Type</label>
-                  <p className="type">{p.type}</p>
+                    <div>Type/s:</div>
+                    {pin?.disability_types?.map((type) => {
+                      return (
+                        <b key={type.id} className="type">
+                          {type.name}
+                        </b>
+                      );
+                    })}
 
-                  <span className="username">
-                    Created by <b>Vlad</b>
-                  </span>
+                    {!pin.is_anonymous && (
+                      <p>
+                        Created by <b>{pin?.user?.username}</b>
+                      </p>
+                    )}
 
-                  <span className="date">{p.date}</span>
+                    <p>
+                      Date created <b>{pin.date_created}</b>
+                    </p>
 
-                  <div className="votesContainer">
-                    <LikeOutlined className="like" />
-                    <DislikeOutlined className="unlike" />
+                    <div className="votesContainer">
+                      <LikeOutlined
+                        onClick={() => {
+                          setUpVotes((prevUpVotes) =>
+                            prevUpVotes !== undefined ? prevUpVotes + 1 : 0
+                          );
+                          setHasVoted(true);
+                          if (hasVoted) {
+                            setDownVotes((prevDownVotes) =>
+                              prevDownVotes !== undefined
+                                ? prevDownVotes - 1
+                                : 0
+                            );
+                          }
+                        }}
+                        className="like"
+                      />
+                      <p>{upVotes}</p>
+                      <DislikeOutlined
+                        onClick={() => {
+                          setDownVotes((prevDownVotes) =>
+                            prevDownVotes !== undefined ? prevDownVotes + 1 : 0
+                          );
+                          setHasVoted(true);
+                          if (hasVoted) {
+                            setUpVotes((prevUpVotes) =>
+                              prevUpVotes !== undefined ? prevUpVotes - 1 : 0
+                            );
+                          }
+                        }}
+                        className="unlike"
+                      />
+                      <p>{downVotes}</p>
+                    </div>
                   </div>
-                </div>
-              </Popup>
-            )}
-          </>
-        ))}
+                </Popup>
+              )}
+            </div>
+          );
+        })}
         {newPlace && (
           <>
             <Marker latitude={newPlace.latitude} longitude={newPlace.longitude}>
-              <svg height={40} viewBox="0 0 24 24" style={pinStyle}>
+              <svg height={40} viewBox="0 0 24 24" style={initialPinStyle}>
                 <path d={pinIcon} />
               </svg>
             </Marker>
@@ -199,7 +290,7 @@ const CityMap: FC = () => {
                     onChange={handleStatusOnChange}
                   ></Select>
 
-                  <label>Type</label>
+                  <label>Types</label>
                   <Select
                     options={[
                       {
@@ -219,7 +310,7 @@ const CityMap: FC = () => {
                         label: "Speech Disabilities",
                       },
                     ]}
-                    onChange={handleTypeOnChange}
+                    onChange={handleDisabilityTypesOnChange}
                     mode="multiple"
                   ></Select>
 

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
   const navigate = useNavigate();
+  const isUserLogged = localStorage.getItem("token");
 
   const handleLogIn = () => {
     navigate("/login");
@@ -12,6 +13,7 @@ const Header: FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const handleRegistration = () => {
@@ -21,8 +23,6 @@ const Header: FC = () => {
   const handleGoHome = () => {
     navigate("/");
   };
-
-  const isUserLogged = localStorage.getItem("token");
 
   return (
     <div className="headerContainer">
@@ -38,7 +38,7 @@ const Header: FC = () => {
           )}
         />
       </div>
-      {isUserLogged ? (
+      {isUserLogged !== null ? (
         <div className="logoutContainer">
           <div className="headerLogoContainer">
             {" "}
