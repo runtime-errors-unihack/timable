@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from loguru import logger
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from timable_backend.db.db_models import UserModelDB
 from timable_backend.models import UserBase
@@ -21,7 +21,10 @@ def create_db_user(user: UserBase):
 
 
 def get_db_user_by_id(id: int, db: Session) -> UserModelDB:
-    user = db.query(UserModelDB).filter(UserModelDB.id == id).first()
+    user = db.query(UserModelDB).filter(UserModelDB.id == id).options(
+        joinedload(UserModelDB.pins),
+        joinedload(UserModelDB.votes)
+    ).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user

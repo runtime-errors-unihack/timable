@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from ..db.db_models import UserModelDB
 from ..db.session import get_db
@@ -19,7 +19,11 @@ async def create_user(user: UserBase, db: Session = Depends(get_db)):
 
 @router.get("/users", description="Get all users")
 async def get_users(db: Session = Depends(get_db)):
-    return db.query(UserModelDB).all()
+    # for each user, also add it's votes and pins
+    return db.query(UserModelDB).options(
+        joinedload(UserModelDB.pins),
+        joinedload(UserModelDB.votes)
+    ).all()
 
 
 @router.get("/users/{id}", description="Get a user by id")
