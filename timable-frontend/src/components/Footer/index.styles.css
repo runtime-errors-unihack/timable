@@ -18,6 +18,14 @@
   color: #000f1b;
 }
 
+.emptyFooterHide{
+  background-color: #000f1b;
+  width: 12%;
+  height: 100%;
+  color: #000f1b;
+  display: none;
+}
+
 .footer{
   width: 88%;
   align-items: center;

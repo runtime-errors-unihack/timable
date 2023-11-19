@@ -1,14 +1,43 @@
 .formContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  padding-top: 110px;
+  height: 100%;
 }
 
 .formTitle {
-    color: white;
+  color: white;
+  padding-bottom: 20px;
 }
 
 .input {
-    margin-bottom: 8px;
+  margin-bottom: 32px !important;
+  height: 50px;
+  width: 250px !important;
+  font-size: 16px !important;
+}
+
+.registerButton{
+  width: 250px;
+  font-size: 18px;
+  height: 40px !important;
+  font-weight: 600 !important;
+}
+
+.formLabel {
+  color: rgba(255, 255, 255, 0.663);
+  display: flex;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  padding-bottom: 5x;
+  width: 250px;
+}
+
+.loginButton {
+  width: 250px;
+  font-size: 18px;
+  height: 40px !important;
+  font-weight: 600 !important;
 }

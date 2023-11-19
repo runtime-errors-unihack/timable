@@ -16,12 +16,19 @@ import Analytics from "./pages/Analytics";
 import Content from "./components/Content";
 
 const App: FC = () => {
+  const currentUrl = window.location.href;
+  const hideSideBar =
+    currentUrl === "http://localhost:3000/login" ||
+    currentUrl === "http://localhost:3000/register"
+      ? true
+      : false;
+
   return (
     <>
-      <Header />
+      <Header  />
       <div className="layoutContainer">
-      <Sidebar />
-        <Content>
+        <Sidebar hideSideBar={hideSideBar} />
+        <Content hideSideBar={hideSideBar}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about-us" element={<AboutUs />} />
@@ -33,9 +40,8 @@ const App: FC = () => {
             <Route path="top-zones" element={<TopZones />} />
           </Routes>
         </Content>
-     
       </div>
-      <Footer />
+      <Footer hideSideBar={hideSideBar} />
     </>
   );
 };

@@ -5,14 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const isUserLogged = localStorage.getItem("token");
+  const currentUrl = window.location.href;
+  const isUserLogged = sessionStorage.getItem("token");
+  const isOnLogin = currentUrl === "http://localhost:3000/login";
+  const isOnRegister = currentUrl === "http://localhost:3000/register";
 
   const handleLogIn = () => {
     navigate("/login");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     navigate("/login");
   };
 
@@ -41,7 +44,6 @@ const Header: FC = () => {
       {isUserLogged !== null ? (
         <div className="logoutContainer">
           <div className="headerLogoContainer">
-            {" "}
             <LogoutOutlined className="headerLogoOut" />
           </div>
           <div className="logoutText" onClick={() => handleLogout()}>
@@ -51,9 +53,14 @@ const Header: FC = () => {
       ) : (
         <div className="registerLoginContainer">
           <div className="logoutText">
-            <div onClick={() => handleLogIn()}>Login</div>
-            <div className="headerSeparator">|</div>
-            <div onClick={() => handleRegistration()}> Register</div>
+            {isOnRegister && <div onClick={() => handleLogIn()}>Login</div>}
+            {!(isOnLogin || isOnRegister) && (
+              <div className="headerSeparator">|</div>
+            )}
+
+            {isOnLogin && (
+              <div onClick={() => handleRegistration()}> Register</div>
+            )}
           </div>
         </div>
       )}
