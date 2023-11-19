@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum, Float, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum, Float, Table, DateTime, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -18,6 +18,7 @@ class UserModelDB(BaseModel):
     surname = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     votes = relationship("VoteModelDB", back_populates="user")
+    pins = relationship("PinModelDB", back_populates="user")
 
 
 pin_disability_association = Table(
@@ -49,8 +50,11 @@ class PinModelDB(BaseModel):
         back_populates="pins",
     )
     is_anonymous = Column(Boolean, default=False, nullable=True)
+    date_created = Column(DateTime, default=func.now(), nullable=False)
 
     votes = relationship("VoteModelDB", back_populates="pin")
+    user = relationship("UserModelDB", back_populates="pins")
+
 
 
 class VoteModelDB(BaseModel):
