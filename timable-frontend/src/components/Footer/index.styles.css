@@ -7,5 +7,20 @@
   justify-content: center;
   font-size: 14px;
   min-width: 620px;
+  width: 100%;
 
+
+}
+.emptyFooter{
+  background-color: #000f1b;
+  width: 12%;
+  height: 100%;
+  color: #000f1b;
+}
+
+.footer{
+  width: 88%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }

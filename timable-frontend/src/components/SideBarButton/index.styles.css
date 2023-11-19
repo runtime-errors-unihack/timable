@@ -26,12 +26,25 @@
   padding-right: 10px;
 }
 
+.siderButtonContainer{
+  margin-bottom: 40px;
+  /* background-color: #3187ff; */
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding-left: 5px;
+  padding-left: 20px;
+}
+
 .sidebarButtonsBigContainer{
   height: 390px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding-bottom: 80px;
+    /* padding-bottom: 80px; */
+    padding-top: 240px;
+
 }
 
 

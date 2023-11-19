@@ -4,8 +4,9 @@ import { CopyrightOutlined } from "@ant-design/icons";
 
 const Footer = () => {
   return <div className="footerContainer">
-    <CopyrightOutlined />
-    2023 TimAble 
+    <div className="emptyFooter">f</div>
+    <div className="footer"><CopyrightOutlined />
+    2023 TimAble </div>
   </div>;
 };
 

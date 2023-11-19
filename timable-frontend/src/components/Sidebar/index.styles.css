@@ -1,23 +1,35 @@
 .sidebarContainer {
   height: 100%;
-  width: 13%;
-  background-color: #011627;
+  width: 12%;
   display: flex;
   align-items: center;
+  background-color:#000f1c;
+  /* border-right: 2px solid rgba(255, 255, 255, 0.27); */
   /* justify-content: center; */
 }
 
-.siderBackground {
-  /* background-color: #8da9c4; */
-  height: 80%;
-  width: 200px;
+.goIconSidebar{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+}
+
+.siderBackground {
+  height: 90%;
+  /* width: 200px; */
+  display: flex;
+  /* justify-content: space-evenly; */
+  /* align-items: center; */
   flex-direction: column;
-  border-radius: 3px;
-  margin-left: 15px;
-  padding: 5px 10px;
+  /* border-radius: 3px; */
+  /* margin-left: 15px; */
+  padding: 20px 0px 20px 0px;
+}
+
+.headerLogoInSidebar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sidebarIconContainer {
