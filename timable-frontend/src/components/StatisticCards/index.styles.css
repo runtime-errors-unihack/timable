@@ -1,42 +1,28 @@
 .staticCardsContainer {
   background: white;
-  height: 100px;
-  width: 210px;
-
+  height: 120px;
+  width: 215px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  margin: 20px 0px;
-  padding-top: 10px;
+  margin-top: 20px;
 }
 
 .staticCardsContainerFirst {
   background: white;
-  height: 100px;
-  width: 210px;
-
+  height: 120px;
+  width: 215px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  margin-bottom: 20px;
-  padding-top: 10px;
 }
-
-/* .staticCardsContainerFirst:hover {
-  transform: scale(1.05);
-}
-
-.staticCardsContainer:hover {
-  transform: scale(1.05);
-} */
 
 .staticCardsTile {
   font-size: 20px;
-  height: 40px;
   width: 210px;
   display: flex;
   justify-content: center;
@@ -50,7 +36,7 @@
 }
 
 .tooltipIcon {
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .staticCardsNumberAverage {
@@ -65,43 +51,34 @@
 
 .staticCardsNumberClosed {
   font-size: 60px;
-  color: #0F9C72;
+  color: #0f9c72;
 }
 
 .staticCardsBigContainer {
   min-width: 255px;
-  padding-top: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.topList {
-}
-
 .zone {
   font-size: 18px;
-  margin: 5px 0px;
+  margin-top: 5px;
   color: black;
 }
 
 .staticCardZone {
   background: white;
-  height: 110px;
-  width: 210px;
-
+  height: 135px;
+  width: 215px;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-weight: 500;
-  margin: 20px 0px;
+  margin-top: 20px;
+  margin-bottom: 15px;
 }
-
-/* .staticCardZone:hover {
-  transform: scale(1.05);
-} */
-
 
 .tooltip-container {
   position: relative;
@@ -110,9 +87,9 @@
   cursor: pointer;
 }
 
-.tooltip {
+.tooltipStatisticCards {
   visibility: hidden;
-  width: 260px;
+  width: 240px;
   background-color: #333;
   color: #fff;
   text-align: center;
@@ -120,16 +97,16 @@
   padding: 5px;
   position: absolute;
   z-index: 1;
-  bottom: 110%;
+  bottom: 70%;
   left: 50%;
   margin-left: -50px;
   opacity: 0;
   transition: opacity 0.3s;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
 }
 
-.tooltip-container:hover .tooltip {
+.tooltip-container:hover .tooltipStatisticCards {
   visibility: visible;
   opacity: 1;
 }

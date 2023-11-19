@@ -1,12 +1,10 @@
 .typeChartContainer {
   width: 300px;
   margin: 0px 20px;
-  height: 610px;
-  padding-top: 50px;
+  height: 615px;
 }
 
 .columnChartTitle {
-  margin-top: 30px;
   color: white;
 }
 

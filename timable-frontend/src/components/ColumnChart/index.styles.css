@@ -10,8 +10,11 @@
 
 .columnChart {
   background-color: white !important;
-  padding: 5px;
   height: 300px;
-  
+}
+
+.columnChartTitle{
+  color: white;
+  margin-top: 20px;
 }
 
