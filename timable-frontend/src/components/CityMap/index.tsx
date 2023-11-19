@@ -22,7 +22,11 @@ import { Select, Switch } from "antd";
 import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import { VoteModel } from "../../models/vote-model";
 
-const CityMap: FC = () => {
+interface CityMapProps {
+  updatedPins: Array<GetPinModel>;
+}
+
+const CityMap: FC<CityMapProps> = ({ updatedPins }) => {
   const [viewport, setViewport] = useState<ViewPortModel>({
     latitude: 45.760696,
     longitude: 21.226788,
@@ -62,6 +66,10 @@ const CityMap: FC = () => {
     getPins();
   }, []);
 
+  useEffect(() => {
+    if (updatedPins.length !== 0) setPins(updatedPins);
+  }, [updatedPins]);
+
   const handleMarkerClick = (
     id: number,
     lat: number,
@@ -86,6 +94,7 @@ const CityMap: FC = () => {
   };
 
   const handleTagSelection = (value: string) => {
+    console.log('',value)
     setTag(value);
   };
 
@@ -116,6 +125,7 @@ const CityMap: FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    console.log(tag)
     e.preventDefault();
     const fileURL = await uploadFile();
     const newPin: SendPinModel = {
@@ -126,7 +136,7 @@ const CityMap: FC = () => {
       is_anonymous: isAnonym,
       latitude: newPlace?.latitude ?? 0,
       longitude: newPlace?.longitude ?? 0,
-      tag: tag,
+      tag: tag ?? null ,
     };
 
     const pin = await axios.post("http://localhost:8000/pin", newPin);

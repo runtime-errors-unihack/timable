@@ -1,18 +1,35 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Input } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import "./index.styles.css";
+import axios from "axios";
+import { UserModel } from "../../models/user-model";
 
 const Settings: FC = () => {
   const [disabledUsername, setDisabledUsername] = useState(true);
   const [disabledPhoneNumber, setDisabledPhoneNumber] = useState(true);
   const [disabledPassword, setDisabledPassword] = useState(true);
+  const [userId, setUserId] = useState<UserModel>();
+
+  const getUserDetails = async () => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const user = await axios.get("http://localhost:8000/session", {
+        params: { session: token },
+      });
+      setUserId(user.data);
+    }
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
   return (
     <>
       <div className="settingsBigContainer">
         <div className="settingsContainer">
           <div className="settingsLeftSide">
-            <div className="settingsWelcomeMessage">Hello, username</div>
+            <div className="settingsWelcomeMessage">Hello, {userId?.username}</div>
             <div className="inputFieldsSettingsContainer">
               <div className="pictureContainerSettings">
                 <div className="pictureSettings"></div>
@@ -24,7 +41,7 @@ const Settings: FC = () => {
                   <Input
                     className="inputSettingsBox"
                     disabled={disabledUsername}
-                    placeholder="Username"
+                    placeholder={userId?.username}
                   />
                   <EditOutlined
                     className="iconSettings"
@@ -38,7 +55,7 @@ const Settings: FC = () => {
                 <div className="inputFieldSettings">
                   <Input
                     className="inputSettingsBox"
-                    placeholder="Phone number"
+                    placeholder={userId?.phone}
                     disabled={disabledPhoneNumber}
                   />
                   <EditOutlined
@@ -82,7 +99,7 @@ const Settings: FC = () => {
           </div>
 
           <div className="settingsRightSide">
-            <div >
+            <div>
               <div className="settingsYourBadgesText">Your Badges</div>
               <div className="settingsBadgesContainer">
                 <div className="settingsBadge"></div>
