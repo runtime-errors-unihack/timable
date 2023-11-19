@@ -1,9 +1,11 @@
 export interface UserModel {
     id: number;
-    userName: number;
+    username: string;
     email: string;
-    isAdmin: boolean;
+    is_admin: boolean;
     name: string;
     surname: string;
     phone: string;
+    password: string;
+    profile_pic_url: string;
 }

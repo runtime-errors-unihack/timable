@@ -1,4 +1,6 @@
 export interface VoteModel {
     id: number;
-    positive: boolean;
+    pin_id: number;
+    user_id: number;
+    state: string;
 }

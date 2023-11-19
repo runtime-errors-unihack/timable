@@ -41,29 +41,6 @@ const FileUpload: React.FC<FileUpload> = ({ file, setFile }) => {
     setFile(uploadedFile);
   };
 
-  //   const handleUpload = async () => {
-  //     try {
-  //       if (!file) {
-  //         console.error("No file selected");
-  //         return;
-  //       }
-
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-
-  //       // Replace the URL with your backend endpoint
-  //       const response = await axios.post("http://example.com/upload", formData, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       });
-
-  //       console.log("File uploaded successfully:", response.data);
-  //     } catch (error) {
-  //       console.error("Error uploading file:", error);
-  //     }
-  //   };
-
   return (
     <div>
       <input type="file" onChange={handleFileChange} />

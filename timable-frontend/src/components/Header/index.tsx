@@ -3,24 +3,26 @@ import "./index.styles.css";
 import Icon, { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-// import icon  from '../../../public/assets/logo.svg'
-
 const Header: FC = () => {
   const navigate = useNavigate();
+  const isUserLogged = localStorage.getItem("token");
 
   const handleLogIn = () => {
     navigate("/login");
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   const handleRegistration = () => {
-    navigate("/register")
+    navigate("/register");
   };
 
   const handleGoHome = () => {
     navigate("/");
   };
-
-  const isUserLogged = localStorage.getItem("UserId");
 
   return (
     <div className="headerContainer">
@@ -36,13 +38,15 @@ const Header: FC = () => {
           )}
         />
       </div>
-      {isUserLogged ? (
+      {isUserLogged !== null ? (
         <div className="logoutContainer">
           <div className="headerLogoContainer">
             {" "}
             <LogoutOutlined className="headerLogoOut" />
           </div>
-          <div className="logoutText">Log Out</div>
+          <div className="logoutText" onClick={() => handleLogout()}>
+            Log Out
+          </div>
         </div>
       ) : (
         <div className="registerLoginContainer">
