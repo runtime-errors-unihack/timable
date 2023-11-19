@@ -1,0 +1,14 @@
+.cityMapContainer{
+    height: 90%;
+    width: 100%;
+}
+
+.selectHome{
+    margin-bottom: 20px !important;
+    margin-right: 120px !important;
+    width: 249px;
+}
+
+.selectContainer{
+    margin-left: 75px;
+}

@@ -1,18 +1,15 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import "./index.styles.css";
 import SideBarButtons from "../SideBarButton";
 import Icon from "@ant-design/icons";
 
-interface SidebarProps{
-  hideSideBar: boolean
-}
-
-const Sidebar : FC<SidebarProps> = ({hideSideBar}) => {
+const Sidebar: FC = ({}) => {
   return (
     <>
-      <div  className={hideSideBar? "sidebarContainerHide": "sidebarContainer"}>
+      <div  className={ "sidebarContainer"}>
         <div className="siderBackground">
-          <Icon className="goIconSidebar"
+          <Icon
+            className="goIconSidebar"
             component={() => (
               <img className="headerLogoInSidebar" src="/assets/logo.svg" />
             )}

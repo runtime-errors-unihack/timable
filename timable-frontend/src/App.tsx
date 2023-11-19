@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar/indext";
@@ -16,19 +16,24 @@ import Analytics from "./pages/Analytics";
 import Content from "./components/Content";
 
 const App: FC = () => {
-  const currentUrl = window.location.href;
+  const [url, setUrl] = useState<string>();
+
+  useEffect(() => {
+    setUrl(window.location.href);
+  }, [window.location.href]);
+
   const hideSideBar =
-    currentUrl === "http://localhost:3000/login" ||
-    currentUrl === "http://localhost:3000/register"
+    url === "http://localhost:3000/login" ||
+    url === "http://localhost:3000/register"
       ? true
       : false;
 
   return (
     <>
-      <Header  />
+      <Header />
       <div className="layoutContainer">
-        <Sidebar hideSideBar={hideSideBar} />
-        <Content hideSideBar={hideSideBar}>
+        <Sidebar  />
+        <Content>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about-us" element={<AboutUs />} />
@@ -41,7 +46,7 @@ const App: FC = () => {
           </Routes>
         </Content>
       </div>
-      <Footer hideSideBar={hideSideBar} />
+      <Footer  />
     </>
   );
 };
