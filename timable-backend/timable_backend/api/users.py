@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from loguru import logger
 from sqlalchemy.orm import Session, joinedload
 
 from ..db.db_models import UserModelDB
@@ -37,8 +38,8 @@ async def update_user(id: int, user: UserEdit, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     for key, value in user:
-        if hasattr(db_user, key) and value:
-            print(key, value)
+        if hasattr(db_user, key) and value is not None:
+            logger.debug(f"Changed field {key} to {value} for user {id}")
             setattr(db_user, key, value)
         if key == 'password' and user.password:
             setattr(db_user, 'password', hash_password(user.password))

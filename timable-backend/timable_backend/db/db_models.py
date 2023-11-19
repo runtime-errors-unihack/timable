@@ -19,6 +19,7 @@ class UserModelDB(BaseModel):
     phone = Column(String, nullable=True)
     votes = relationship("VoteModelDB", back_populates="user")
     pins = relationship("PinModelDB", back_populates="user")
+    is_visually_impaired = Column(Boolean, default=False, nullable=True)
 
 
 pin_disability_association = Table(

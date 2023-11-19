@@ -10,6 +10,7 @@ class UserBase(BaseModel):
     name: str | None = Field(description="The user's name", default=None)
     surname: str | None = Field(description="The user's surname", default=None)
     phone: str = Field(description="The user's phone number")
+    is_visually_impaired: bool | None = Field(description="Whether the user is visually impaired", default=False)
 
 
 class UserEdit(BaseModel):
@@ -24,6 +25,7 @@ class UserEdit(BaseModel):
     surname: str | None = Field(description="The user's surname", default=None)
     phone: str | None = Field(description="The user's phone number", default=None)
     profile_pic_url: str | None = Field(description="The URL of the user's profile picture", default=None)
+    is_visually_impaired: bool | None = Field(description="Whether the user is visually impaired", default=False)
 
 
 class UserExtended(UserBase):
