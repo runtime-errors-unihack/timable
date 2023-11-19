@@ -6,7 +6,7 @@ from loguru import logger
 from passlib.context import CryptContext
 from jose import jwt
 from timable_backend.db.db_models import UserModelDB
-from timable_backend.models import UserBase
+from timable_backend.models import UserComplete
 
 JWT_ISSUER = "timable"
 
@@ -16,7 +16,7 @@ secret = "really-secret-key"
 def create_jwt_session(user: UserModelDB):
     expire = datetime.utcnow() + timedelta(hours=3)
     expire = expire.replace(tzinfo=timezone.utc)  # Make it timezone-aware
-    encoded_user = UserBase.model_validate(user.__dict__).model_dump()
+    encoded_user = UserComplete.model_validate(user.__dict__).model_dump()
     encoded_user["exp"] = expire
     encoded_user["iat"] = datetime.utcnow().replace(tzinfo=timezone.utc)
     encoded_user["sub"] = str(user.id)
