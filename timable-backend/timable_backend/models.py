@@ -59,11 +59,6 @@ class PinModel(BaseModel):
     is_anonymous: bool | None = Field(description="Whether the vote is anonymous", default=False)
 
 
-class PinExtended(PinModel):
-    id: int = Field(description="The ID of the pin")
-    image_url: str | None = Field(description="The URL of the pin's image", default=None)
-
-
 class CreateSessionModel(BaseModel):
     username: str = Field(description="The user's username")
     password: str = Field(description="The user's password")

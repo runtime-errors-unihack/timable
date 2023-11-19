@@ -1,11 +1,15 @@
+from datetime import datetime, timedelta
+from enum import Enum
+
 from fastapi import APIRouter, HTTPException, Depends
 from loguru import logger
+from sqlalchemy import func, cast, Integer
 from sqlalchemy.orm import joinedload
 
-from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB
+from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, VoteModelDB
 from timable_backend.db.session import get_db
-from timable_backend.models import PinModel
-from timable_backend.services.pin import get_pin_by_id, get_all_disability_types
+from timable_backend.models import PinModel, PinStatusEnum, VoteModel
+from timable_backend.services.pin import get_pin_by_id
 
 router = APIRouter(tags=["pin"])
 
@@ -35,25 +39,55 @@ async def create_pin(pin: PinModel, db=Depends(get_db)):
         logger.exception(e)
         raise HTTPException(status_code=500, detail=f"Couldn't create pin. {str(e)}")
 
-    return new_pin
+    return db.query(PinModelDB).options(
+        joinedload(PinModelDB.disability_types),
+        joinedload(PinModelDB.user)
+    ).filter_by(id=new_pin.id).first()
 
 
 @router.get("/pin", description="Get all pins by type")
-async def get_pins(disability_type: str | None = None, db=Depends(get_db)):
+async def get_pins(
+    disability_type: str | None = None,
+    months_ago: int | None = None,
+    min_votes: int | None = None,
+    max_votes: int | None = None,
+    status: PinStatusEnum | None = None,
+    db=Depends(get_db)
+):
+    # Filter by disability type
     if not disability_type:
-        return db.query(PinModelDB).all()
+        query = db.query(PinModelDB).options(
+            joinedload(PinModelDB.disability_types),
+            joinedload(PinModelDB.user),
+            joinedload(PinModelDB.votes)
+        )
+    else:
+        disability_type_instance = db.query(DisabilityTypeModelDB).filter_by(name=disability_type).first()
 
-    # Fetch the specific disability type based on the pin_type
-    disability_type = db.query(DisabilityTypeModelDB).filter_by(name=disability_type).first()
+        if not disability_type_instance:
+            raise HTTPException(status_code=404, detail=f"Disability type not found.")
 
-    # Check if the disability type exists
-    if not disability_type:
-        raise HTTPException(status_code=404, detail=f"Disability type not found.")
+        # Base query with disability type and joined loads
+        query = db.query(PinModelDB).options(
+            joinedload(PinModelDB.disability_types),
+            joinedload(PinModelDB.user),
+            joinedload(PinModelDB.votes)
+        ).filter(PinModelDB.disability_types.contains(disability_type_instance))
 
-    # Use the joinedload to retrieve pins with the specified disability type
-    pins = db.query(PinModelDB).options(
-        joinedload(PinModelDB.disability_types)
-    ).filter(PinModelDB.disability_types.contains(disability_type)).all()
+    if status is not None:
+        query = query.filter(PinModelDB.status == status)
+    if months_ago is not None:
+        start_date = datetime.utcnow() - timedelta(days=30 * months_ago)
+        query = query.filter(PinModelDB.date_created >= start_date)
+    pins = query.all()
+
+    # filter by min_votes
+    if min_votes is not None:
+        pins = [pin for pin in pins if len(pin.votes) >= min_votes]
+
+    # filter by max_votes #copilo
+    if max_votes is not None:
+        pins = [pin for pin in pins if len(pin.votes) <= max_votes]
 
     return pins
 
@@ -82,7 +116,6 @@ async def update_pin(pin_id: int, path_to_file: str | None = None, db=Depends(ge
         raise HTTPException(status_code=404, detail="Pin not found")
     if path_to_file:
         setattr(found_pin, "image_url", path_to_file)
-
     try:
         db.commit()
         db.refresh(found_pin)

@@ -18,6 +18,7 @@ class UserModelDB(BaseModel):
     surname = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     votes = relationship("VoteModelDB", back_populates="user")
+    pins = relationship("PinModelDB", back_populates="user")
 
 
 pin_disability_association = Table(
@@ -52,6 +53,8 @@ class PinModelDB(BaseModel):
     date_created = Column(DateTime, default=func.now(), nullable=False)
 
     votes = relationship("VoteModelDB", back_populates="pin")
+    user = relationship("UserModelDB", back_populates="pins")
+
 
 
 class VoteModelDB(BaseModel):
