@@ -1,12 +1,14 @@
 .zoneMapsBigContainer {
-  height: 500px;
-  width: 900px;
-  background-color: #006767;
+  height: 95%;
+  width: 100%;
+  background-color: white;
 }
 
 .topZonesPageContainer {
   display: flex;
   flex-direction: row;
+  width: 90%;
+  height: 95%;
 }
 
 .mapBorder {
@@ -17,11 +19,52 @@
 .mapBigContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .mapTitle {
   color: white;
-  margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: 500;
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+}
+
+.staticCardsTopZones {
+  padding-top: 140px;
+  height: 100%;
+  margin-right: -30px;
+  padding-left: 10px;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tooltipStatisticCards {
+  visibility: hidden;
+  width: 330px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 70%;
+  left: -180px;
+  margin-left: -50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+  text-align: left;
+}
+
+.tooltip-container:hover .tooltipStatisticCards {
+  visibility: visible;
+  opacity: 1;
 }
