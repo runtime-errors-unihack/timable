@@ -1,8 +1,15 @@
+import json
+import os
+
 from fastapi import APIRouter, Depends
+from loguru import logger
+from shapely import Point, Polygon
 from sqlalchemy import func
 
-from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, pin_disability_association
+from timable_backend.db.db_models import PinModelDB, DisabilityTypeModelDB, pin_disability_association, VoteModelDB
 from timable_backend.db.session import get_db
+from timable_backend.models import MapPointModel
+from timable_backend.services.statistics import get_area_score
 
 router = APIRouter(prefix="/statistics", tags=["statistics"])
 
@@ -21,3 +28,20 @@ async def get_pins_per_disability_type(db=Depends(get_db)):
             disability_type_count[disability_type.name] += 1
 
     return disability_type_count
+
+
+@router.get("/area-accessibility-score", description="Get the average score of an area")
+async def calculate_average_area_score(db=Depends(get_db)):
+    file_path = os.path.join("timable_backend", "db", "data.json")
+    with open(file_path, "r") as file:
+        data = json.load(file)
+    score_dict = {}
+    try:
+        for feature in data["features"]:
+            name = feature["properties"]["Name"]
+            coordinates = feature["geometry"]["coordinates"][0]
+            score_dict[name] = get_area_score(coordinates, db)
+    except Exception as e:
+        logger.exception(e)
+        raise e
+    return score_dict
