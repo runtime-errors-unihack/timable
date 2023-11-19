@@ -78,3 +78,8 @@ class VoteModel(BaseModel):
 
 class VoteExtended(VoteModel):
     id: int | None = Field(description="The ID of the vote", default=None)
+
+
+class MapPointModel(BaseModel):
+    latitude: int = Field(description="Latitude of the point", default=0.0)
+    longitude: int = Field(description="Longitude of the point", default=0.0)

@@ -3,8 +3,8 @@ from fastapi import APIRouter
 from loguru import logger
 
 from timable_backend.db.session import get_db
-from timable_backend.models import CreateSessionModel, UserBase
-from timable_backend.services.users import get_db_user_by_username
+from timable_backend.models import CreateSessionModel, UserBase, UserComplete
+from timable_backend.services.users import get_db_user_by_username, get_db_user_by_id
 from timable_backend.services.jwt_session import create_jwt_session, get_jwt_session, verify_password
 
 router = APIRouter(tags=["session"])
@@ -22,10 +22,10 @@ async def create_session(session: CreateSessionModel, db=Depends(get_db)):
     return create_jwt_session(user)
 
 
-@router.get("/session", description="Get the current session", response_model=UserBase)
-async def get_session(session: str):
+@router.get("/session", description="Get the current session", response_model=UserComplete)
+async def get_session(session: str, db=Depends(get_db)):
     """
     This will receive a JWT token and return the user's id, username, and is_admin flag.
     """
-    #TODO: return fresh info about the user
-    return get_jwt_session(session)
+    decoded_token = get_jwt_session(session)
+    return get_db_user_by_id(decoded_token["sub"], db)
