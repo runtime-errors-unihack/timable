@@ -1,5 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
-import ReactDOM from "react-dom";
+import { FC } from "react";
 import { AreaMap } from "@ant-design/maps";
 
 import "./index.styles.css";

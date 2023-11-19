@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import { FC } from "react";
 import "./index.styles.css";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
-const StaticCards = () => {
+interface StaticCards {
+  cityAverage: number;
+  totalPins: number;
+  closedPins: number;
+  topZones: [string, unknown][];
+}
+
+const StaticCards: FC<StaticCards> = ({
+  cityAverage,
+  totalPins,
+  closedPins,
+  topZones,
+}) => {
+
   return (
     <div className="staticCardsBigContainer">
       <div className="staticCardsContainerFirst">
@@ -22,7 +35,9 @@ const StaticCards = () => {
             </div>
           </div>
         </div>
-        <div className="staticCardsNumberAverage">3.2</div>
+        <div className="staticCardsNumberAverage">
+          {(cityAverage * 100).toFixed(2)}
+        </div>
       </div>
       <div className="staticCardsContainer">
         <div className="staticCardsTile">
@@ -43,7 +58,7 @@ const StaticCards = () => {
             </div>
           </div>
         </div>
-        <div className="staticCardsNumberTotal">322</div>
+        <div className="staticCardsNumberTotal">{totalPins}</div>
       </div>
       <div className="staticCardsContainer">
         <div className="staticCardsTile">
@@ -62,7 +77,7 @@ const StaticCards = () => {
             </div>
           </div>
         </div>
-        <div className="staticCardsNumberClosed">124</div>
+        <div className="staticCardsNumberClosed">{closedPins}</div>
       </div>
       <div className="staticCardZone">
         <div className="staticCardsTileZone">
@@ -80,9 +95,13 @@ const StaticCards = () => {
           </div>
         </div>
         <div className="topList">
-          <div className="zone">Complex Studentesc </div>
-          <div className="zone">Iosefin</div>
-          <div className="zone">Lipovei</div>
+          {topZones.length && (
+            <>
+              <div className="zone">{topZones[0][0] ?? ""}</div>
+              <div className="zone">{topZones[1][0] ?? ""}</div>
+              <div className="zone">{topZones[2][0] ?? ""}</div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,17 +1,21 @@
-import React, { useState, useEffect, FC } from "react";
+import { FC } from "react";
 import { Pie } from "@ant-design/plots";
-import ReactDOM from "react-dom";
 import "./index.styles.css";
 
-const DonutChart: FC = () => {
+interface DonutChart {
+  high: string;
+  low: string;
+}
+
+const DonutChart: FC<DonutChart> = ({ high, low }) => {
   const data = [
     {
       type: "High Accessibility",
-      value: 130,
+      value: Number(high),
     },
     {
       type: "Low Accessibility",
-      value: 90,
+      value: Number(low),
     },
   ];
 

@@ -33,7 +33,7 @@ const Login: FC = () => {
           password,
           is_admin: false,
         });
-        localStorage.setItem("token", response.data);
+        sessionStorage.setItem("token", response.data);
         setShowAlert(true);
         setTimeout(() => {
           navigate("/");

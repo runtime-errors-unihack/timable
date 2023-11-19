@@ -46,11 +46,13 @@ const CityMap: FC = () => {
       setPins(allPins.data);
     };
     const getUserDetails = async () => {
-      const token = localStorage.getItem("token");
-      const user = await axios.get("http://localhost:8000/session", {
-        params: { session: token },
-      });
-      setUserId(user.data.id);
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        const user = await axios.get("http://localhost:8000/session", {
+          params: { session: token },
+        });
+        setUserId(user.data.id);
+      }
     };
     getUserDetails();
     getPins();
@@ -147,7 +149,6 @@ const CityMap: FC = () => {
         onDblClick={handleAddClick}
       >
         {pins.map((pin) => {
-          console.log(pin);
           return (
             <div key={pin.id}>
               <Marker latitude={pin.latitude} longitude={pin.longitude}>

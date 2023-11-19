@@ -37,3 +37,4 @@ export enum TypeEnum  {
   AUDITORY_DISABILITIES = 'auditory',
   SPEECH_DISABILITIES = 'speech',
 }
+

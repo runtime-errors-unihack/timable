@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const isUserLogged = localStorage.getItem("token");
+  const isUserLogged = sessionStorage.getItem("token");
 
   const handleLogIn = () => {
     navigate("/login");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     navigate("/login");
   };
 
