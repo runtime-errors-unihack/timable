@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const isUserLogged = localStorage.getItem("token");
+  const isUserLogged = sessionStorage.getItem("token");
 
   const handleLogIn = () => {
     navigate("/login");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     navigate("/login");
   };
 
@@ -41,7 +41,6 @@ const Header: FC = () => {
       {isUserLogged !== null ? (
         <div className="logoutContainer">
           <div className="headerLogoContainer">
-            {" "}
             <LogoutOutlined className="headerLogoOut" />
           </div>
           <div className="logoutText" onClick={() => handleLogout()}>
@@ -51,7 +50,7 @@ const Header: FC = () => {
       ) : (
         <div className="registerLoginContainer">
           <div className="logoutText">
-            <div onClick={() => handleLogIn()}>Login</div>
+             <div onClick={() => handleLogIn()}>Login</div>
             <div className="headerSeparator">|</div>
             <div onClick={() => handleRegistration()}> Register</div>
           </div>

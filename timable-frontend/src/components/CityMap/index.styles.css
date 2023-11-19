@@ -8,11 +8,23 @@
 
 .card {
   width: 350px;
-  height: 300px;
+  height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
+
+.mapboxgl-popup-content {
+  border-radius: 5px !important;
+
+}
+
+.pinDescriptionTextArea {
+  border: 1px solid gray !important;
+  height: 120px !important;
+}
+
+
 
 form {
   width: 350px;
@@ -25,8 +37,8 @@ form {
 
 label {
   width: max-content;
-  font-size: 16px;
-  /* margin-top: 3px; */
+  font-size: 14px;
+  padding-top: 10px;
   font-weight: bold;
 }
 
@@ -36,18 +48,35 @@ label {
 
 .switch {
   width: 4px;
+  height: 50px !important;
+  margin-bottom: 10px !important;
 }
 
 .votesContainer {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .like {
   cursor: pointer;
+  font-size: 20px;
+  color: green !important;
+  padding-right: 20px;
+}
+
+.votesNumber{
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px !important;
 }
 
 .unlike {
   cursor: pointer;
+  font-size: 20px;
+  color: red !important;
 }
 
 .username {

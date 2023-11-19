@@ -16,6 +16,8 @@ docker run --name timable-backend-tracking-changes -it -p 8000:8000 -v /Users/al
 
 docker run --name timable-backend-tracking-changes -it -p 8000:8000 -v D:\unihack\timable\timable\timable-backend:/home/timable-backend timable-backend
 
+docker run --name timable-backend-tracking-changes -it -p 8000:8000 -v C:\Users\bianc\Documents\timableHackaton\timable\timable-backend:/home/timable-backend timable-backend
+
 (swap what's after -v, before `:` with your local full path to the timable-backend folder)
 
 ### Turn on the container if it's stopped

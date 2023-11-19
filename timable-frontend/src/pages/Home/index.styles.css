@@ -1,0 +1,25 @@
+.cityMapContainer{
+    height: 82%;
+    width: 100%;
+    margin-left: 50px;
+    margin-bottom: 30px;
+}
+
+.selectHome{
+    margin-bottom: 20px !important;
+    margin-right: 20px !important;
+    width: 249px;
+}
+
+.selectContainer{
+    margin-left: 75px;
+}
+
+.buttonsContainer{
+    margin-left: 75px;
+    padding-bottom: 10px;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+
+}

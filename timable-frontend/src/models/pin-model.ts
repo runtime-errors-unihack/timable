@@ -18,6 +18,7 @@ export interface GetPinModel {
     date_created: string;
     user: UserModel;
     votes: Array<VoteModel>;
+    tag: string| null;
 }
 
 export interface SendPinModel {
@@ -28,4 +29,5 @@ export interface SendPinModel {
     is_anonymous: boolean;
     latitude: number;
     longitude: number;
+    tag: string| null;
 }
