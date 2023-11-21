@@ -1,4 +1,9 @@
-# TimAble
+<div style="display: flex;background-color: white;">
+    <img src="https://raw.githubusercontent.com/runtime-errors-unihack/timable/60004900ca1eada263e22d8b54afa0d18bf93cef/timable-frontend/public/assets/logo.svg" alt="description2" width="50"/>
+    <img src="https://github.com/runtime-errors-unihack/timable/blob/main/timable-frontend/public/assets/TimAble.svg" alt="description1" width="300" style="margin-right: 10px;"/>
+</div>
+
+#
 
 TimAble is a community-based mapping platform dedicated for people with disabilities, 
 that provides inclusivity and accessibility in urban environments. This is the project of our team, `Runtime Errors`, for `UniHack 5` hackathon.
