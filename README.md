@@ -17,7 +17,9 @@ We believe that the best way to achieve this is for the community to come togeth
 
 - community-picked pins on the map, indicating the accessibility status of different places and streets
 - a user-friendly interface that allows users to easily add new pins to the map
-- admins of the platform can see statistic reports about the pins and the city's overall availability status.
+- admins of the platform can see statistic reports about the pins and the city's overall availability status
+- in a statistics view, Timisoara's map is divided on quarters -> each quarter has an accessibility score, based on negative / positive pins submitted by the community
+- the city's accessibility score is an average of all of them
 - gamification for the most active users
 - generated PDF files for general accessibility reports around the city
 - the pins can be filtered by the accessibility type (eg. physical, visual, etc.), or by the type of the place (eg. parking) and they can be good or bad.
