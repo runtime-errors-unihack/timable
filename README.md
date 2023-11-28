@@ -29,8 +29,3 @@ We believe that the best way to achieve this is for the community to come togeth
 - generated PDF files for general accessibility reports around the city
 - the pins can be filtered by the accessibility type (eg. physical, visual, etc.), or by the type of the place (eg. parking) and they can be good or bad.
 - **a more accessible and inclusive place for everyone**.
-
-### SubTracks we have submitted to
-- best typescript app
-- best react app
-- most inovative startup idea
